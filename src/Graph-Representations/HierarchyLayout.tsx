@@ -39,7 +39,7 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], options: any) => {
   };
 };
 
-interface TreeLayoutProps {
+interface HierarchyLayoutProps {
   nodes: Node[];
   edges: Edge[];
   onNodesChange: (changes: NodeChange[]) => void;
@@ -48,7 +48,7 @@ interface TreeLayoutProps {
   setEdges: (edges: Edge[]) => void;
 }
 
-const TreeLayout: React.FC<TreeLayoutProps> = ({
+const HierarchyLayout: React.FC<HierarchyLayoutProps> = ({
   nodes,
   edges,
   onNodesChange,
@@ -93,4 +93,4 @@ const TreeLayout: React.FC<TreeLayoutProps> = ({
   );
 };
 
-export default TreeLayout;
+export default HierarchyLayout;

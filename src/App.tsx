@@ -12,18 +12,17 @@ import {
 
 import { initializeGraph, Block } from "./Helpers/FilterGraph";
 import NoLayout from "./Graph-Representations/NoLayout";
-import TreeLayout from "./Graph-Representations/TreeLayout";
+import HierarchyLayout from "./Graph-Representations/HierarchyLayout";
 import ForceLayout from "./Graph-Representations/ForceLayout";
 import DagreLayout from "./Graph-Representations/DagreLayout";
 import ELKLayout from "./Graph-Representations/ElkLayout";
-
-import "reactflow/dist/style.css";
 
 const returnPositions = (i: number) => {
   return { y: 40, x: i * 200 + 40 };
 };
 
 const blocksToNodes = (blocks: Block[]): Node[] => {
+  console.log(blocks);
   return blocks.map((block, i) => {
     return {
       id: block.id.toString(),
@@ -77,9 +76,9 @@ export default function App() {
           onEdgesChange={onEdgesChange}
         />
       );
-    } else if (layout == "Tree Layout") {
+    } else if (layout == "Hierarchy Layout") {
       return (
-        <TreeLayout
+        <HierarchyLayout
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
@@ -134,12 +133,33 @@ export default function App() {
     [setEdges],
   );
 
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file.type !== "application/json") {
+      alert("Please upload a valid JSON file.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const json = JSON.parse(e.target.result as string);
+        // Handle the JSON data
+        console.log(json);
+        setBlocks(json.blocks);
+      } catch (err) {
+        alert("Failed to parse JSON file.");
+      }
+    };
+    reader.readAsText(file);
+  };
+
   return (
     <ReactFlowProvider>
       <div className="h-screen w-screen">
         <div className="h-[calc(4rem)] bg-blue-200 w-full flex items-center">
           <span className="text-black text-2xl font-semibold mx-auto">
-            Multimedia Graph
+            Multimedia Graph Representation
           </span>
         </div>
         <div className="h-4/5 w-full">
@@ -148,86 +168,101 @@ export default function App() {
           ) : (
             <div className="flex items-center justify-center h-full w-full">
               <span className="text-2xl text-slate-600">
-                {" "}
-                No graph to display. Create a graph from below.
+                No graph to display. Import from a file or create a new graph
+                from below.
               </span>
             </div>
           )}
         </div>
 
-        <div className="flex justify-center items-center px-10 w-full h-[calc(20vh-4rem)] bg-blue-200 space-x-8">
-          <div className="flex flex-col justify-start items-center space-y-2">
-            <span>Layout Type</span>
-            <select
-              value={layoutType}
-              onChange={(e) => setLayoutType(e.target.value)}
-              className="p-2 border"
-            >
-              {[
-                "No Layout",
-                "Tree Layout",
-                "Force Layout",
-                "Dagre Layout",
-                "ELK Layout",
-              ].map((count) => (
-                <option key={count} value={count}>
-                  {count}
-                </option>
-              ))}
-            </select>
+        <div className="flex justify-evenly items-center px-10 w-full h-[calc(20vh-4rem)] bg-blue-200 space-x-8">
+          <div className="flex justify-center space-x-4">
+            <div className="flex flex-col justify-center items-center space-y-2 border-transparent">
+              <span>Import Graph from File</span>
+              <input
+                type="file"
+                accept=".json"
+                onChange={handleFileUpload}
+                className="p-2"
+              />
+            </div>
+          </div>
+          <div className="flex justify-center space-x-4">
+            <div className="flex flex-col justify-center items-center space-y-2">
+              <span>Layout Type</span>
+              <select
+                value={layoutType}
+                onChange={(e) => setLayoutType(e.target.value)}
+                className="p-2 border"
+              >
+                {[
+                  "No Layout",
+                  "Hierarchy Layout",
+                  "Force Layout",
+                  "Dagre Layout",
+                  "ELK Layout",
+                ].map((count) => (
+                  <option key={count} value={count}>
+                    {count}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <div className="flex flex-col justify-start items-center space-y-2">
-            <span>Input Count</span>
-            <select
-              value={inputCount}
-              onChange={(e) => setInputCount(Number(e.target.value))}
-              className="w-[calc(4rem)] p-2 border"
-            >
-              {[1, 2, 3].map((count) => (
-                <option key={count} value={count}>
-                  {count}
-                </option>
-              ))}
-            </select>
-          </div>
+          <div className="flex justify-center space-x-4">
+            <div className="flex flex-col justify-start items-center space-y-2">
+              <span>Input Count</span>
+              <select
+                value={inputCount}
+                onChange={(e) => setInputCount(Number(e.target.value))}
+                className="w-[calc(4rem)] p-2 border"
+              >
+                {[1, 2, 3].map((count) => (
+                  <option key={count} value={count}>
+                    {count}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="flex flex-col justify-start items-center space-y-2">
-            <span>Output Count</span>
-            <select
-              value={outputCount}
-              onChange={(e) => setOutputCount(Number(e.target.value))}
-              className="w-[calc(4rem)] p-2 border"
-            >
-              {[1, 2, 3].map((count) => (
-                <option key={count} value={count}>
-                  {count}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className="flex flex-col justify-start items-center space-y-2">
+              <span>Output Count</span>
+              <select
+                value={outputCount}
+                onChange={(e) => setOutputCount(Number(e.target.value))}
+                className="w-[calc(4rem)] p-2 border"
+              >
+                {[1, 2, 3].map((count) => (
+                  <option key={count} value={count}>
+                    {count}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="flex flex-col justify-start items-center space-y-2">
-            <span>Filter Count</span>
-            <select
-              value={blockCount}
-              onChange={(e) => setBlockCount(Number(e.target.value))}
-              className="w-[calc(4rem)] p-2 border"
-            >
-              {[1, 2, 3, 4, 5].map((count) => (
-                <option key={count} value={count}>
-                  {count}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className="flex flex-col justify-start items-center space-y-2">
+              <span>Filter Count</span>
+              <select
+                value={blockCount}
+                onChange={(e) => setBlockCount(Number(e.target.value))}
+                className="w-[calc(4rem)] p-2 border"
+              >
+                {[1, 2, 3, 4, 5].map((count) => (
+                  <option key={count} value={count}>
+                    {count}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <button
-            onClick={setRandomGraph}
-            className="bg-slate-600 hover:bg-slate-400 text-slate-100 rounded-lg h-12 p-2"
-          >
-            New Graph
-          </button>
+            <button
+              onClick={setRandomGraph}
+              className="bg-slate-600 hover:bg-slate-400 text-slate-100 rounded-lg h-12 p-2"
+            >
+              New Graph
+            </button>
+          </div>
         </div>
       </div>
     </ReactFlowProvider>

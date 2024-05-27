@@ -269,10 +269,6 @@ class Graph {
   }
 }
 
-// Example usage:
-// const graph = new Graph(2, 1, 5); // 2 input blocks, 2 output blocks, 4 filter blocks
-// graph.printGraph();
-//
 export const initializeGraph = (
   inputBlocks: number,
   outputBlocks: number,
