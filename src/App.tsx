@@ -17,6 +17,8 @@ import ForceLayout from "./Graph-Representations/ForceLayout";
 import DagreLayout from "./Graph-Representations/DagreLayout";
 import ELKLayout from "./Graph-Representations/ElkLayout";
 
+import exampleGraphs from "./Helpers/example-graphs.json";
+
 const returnPositions = (i: number) => {
   return { y: 40, x: i * 200 + 40 };
 };
@@ -64,6 +66,7 @@ export default function App() {
   const [outputCount, setOutputCount] = useState(1);
   const [blockCount, setBlockCount] = useState(1);
   const [layoutType, setLayoutType] = useState("No Layout");
+  const [exampleGraphIdx, setExampleGraphIdx] = useState<number>(0);
 
   const returnLayoutView = (layout: string) => {
     if (layout == "No Layout") {
@@ -123,6 +126,23 @@ export default function App() {
     setBlocks(initializeGraph(inputCount, outputCount, blockCount));
   };
 
+  const setExampleGraph = () => {
+    if (exampleGraphIdx == 0) {
+      resetGraph();
+      return;
+    }
+    setBlocks(exampleGraphs[exampleGraphIdx - 1].blocks);
+  };
+
+  const resetGraph = () => {
+    setNodes([]);
+    setEdges([]);
+  };
+
+  useEffect(() => {
+    setExampleGraph();
+  }, [exampleGraphIdx]);
+
   useEffect(() => {
     setNodes(blocksToNodes(blocks));
     setEdges(blocksToEdges(blocks));
@@ -166,17 +186,47 @@ export default function App() {
           {nodes.length != 0 ? (
             returnLayoutView(layoutType)
           ) : (
-            <div className="flex items-center justify-center h-full w-full">
-              <span className="text-2xl text-slate-600">
-                No graph to display. Import from a file or create a new graph
-                from below.
-              </span>
+            <div className="flex items-center justify-center h-full w-full text-2xl text-slate-600">
+              <div>
+                <ul>
+                  <li> No graph to display. You can: </li>
+                  <li>1) Select from example graphs from the dropdown.</li>
+                  <li>
+                    2) Click on the "Import Graph from File" button to import a
+                    graph from a JSON file.
+                  </li>
+                  <li>
+                    3) Click on the "New Graph" button to create a new graph
+                    with the specified parameters.
+                  </li>
+
+                  <li>
+                    Then, select a layout type from the dropdown to visualize
+                    the graph.
+                  </li>
+                </ul>
+              </div>
             </div>
           )}
         </div>
 
         <div className="flex justify-evenly items-center px-10 w-full h-[calc(20vh-4rem)] bg-blue-200 space-x-8">
           <div className="flex justify-center space-x-4">
+            <div className="flex flex-col justify-center items-center space-y-2 border-transparent">
+              <span>Select from Example Graphs</span>
+              <select
+                value={exampleGraphIdx}
+                onChange={(e) => setExampleGraphIdx(Number(e.target.value))}
+                className="p-2 border"
+              >
+                {["Select Graph", ...exampleGraphs].map((graph, idx) => (
+                  <option key={idx} value={idx}>
+                    {typeof graph == "string" ? graph : graph.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className="flex flex-col justify-center items-center space-y-2 border-transparent">
               <span>Import Graph from File</span>
               <input
