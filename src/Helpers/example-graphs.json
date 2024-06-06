@@ -127,5 +127,407 @@
         "outputs": []
       }
     ]
+  },
+  {
+    "title": "Player",
+    "description": "Audio video playback from local file",
+    "blocks": [
+      {
+        "id": 0,
+        "name": "HDD Read",
+        "type": "input",
+        "outputs": [
+          {
+            "path": [1],
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "name": "Demultiplexer",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [2],
+            "type": "video"
+          },
+          {
+            "path": [3],
+            "type": "audio"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Video Decoder",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [4],
+            "type": "video"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Audio Decoder",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [5],
+            "type": "audio"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Video Output",
+        "type": "output",
+        "outputs": []
+      },
+      {
+        "id": 5,
+        "name": "Audio Output",
+        "type": "output",
+        "outputs": []
+      }
+    ]
+  },
+  {
+    "title": "HTTP Streaming Player",
+    "description": "Audio video playback from HTTP streaming source",
+    "blocks": [
+      {
+        "id": 0,
+        "name": "Manifest Read",
+        "type": "input",
+        "outputs": [
+          {
+            "path": [5],
+            "type": "file"
+          }
+        ]
+      },
+
+      {
+        "id": 1,
+        "name": "VideoFetch",
+        "type": "input",
+        "outputs": [
+          {
+            "path": [3],
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "AudioFetch",
+        "type": "input",
+        "outputs": [
+          {
+            "path": [4],
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Video Demultiplexer",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [5],
+            "type": "video"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Audio Demultiplexer",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [5],
+            "type": "audio"
+          }
+        ]
+      },
+
+
+      {
+        "id": 5,
+        "name": "HAS Client",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [6],
+            "type": "video"
+          },
+          {
+            "path": [7],
+            "type": "audio"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "name": "Video Decoder",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [8],
+            "type": "video"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "name": "Audio Decoder",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [9],
+            "type": "audio"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "name": "Video Output",
+        "type": "output",
+        "outputs": []
+      },
+      {
+        "id": 9,
+        "name": "Audio Output",
+        "type": "output",
+        "outputs": []
+      }
+    ]
+  },
+  {
+    "title": "Transcoding",
+    "description": "Audio video transcoding of a local file",
+    "blocks": [
+      {
+        "id": 0,
+        "name": "HDD Read",
+        "type": "input",
+        "outputs": [
+          {
+            "path": [1],
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "name": "Demultiplexer",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [2],
+            "type": "video"
+          },
+          {
+            "path": [3],
+            "type": "audio"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "VideoDecoder",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [4],
+            "type": "video"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "AudioDecoder",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [5],
+            "type": "audio"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "VideoEncoder",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [6],
+            "type": "video"
+          }          
+        ]
+      },
+      {
+        "id": 5,
+        "name": "AudioEncoder",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [6],
+            "type": "audio"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "name": "Multiplexer",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [7],
+            "type": "file"
+          }          
+        ]
+      },
+      {
+        "id": 7,
+        "name": "HDD Write",
+        "type": "output",
+        "outputs": []
+      }
+    ]
+  },
+  {
+    "title": "Dual Transcoding",
+    "description": "Audio video transcoding in two qualities of a file",
+    "blocks": [
+      {
+        "id": 0,
+        "name": "HDD Read",
+        "type": "input",
+        "outputs": [
+          {
+            "path": [1],
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "name": "Demultiplexer",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [2],
+            "type": "video"
+          },
+          {
+            "path": [3],
+            "type": "audio"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Video Decoder",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [4],
+            "type": "video"
+          },
+          {
+            "path": [5],
+            "type": "video"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Audio Decoder",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [6],
+            "type": "audio"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Video Encoder Q1",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [7],
+            "type": "video"
+          }          
+        ]
+      },
+      {
+        "id": 5,
+        "name": "Video Encoder Q2",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [8],
+            "type": "video"
+          }          
+        ]
+      },      {
+        "id": 6,
+        "name": "Audio Encoder",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [7],
+            "type": "audio"
+          },
+          {
+            "path": [8],
+            "type": "audio"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "name": "Multiplexer Q1",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [9],
+            "type": "file"
+          }          
+        ]
+      },
+      {
+        "id": 8,
+        "name": "Multiplexer Q2",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [10],
+            "type": "file"
+          }          
+        ]
+      },
+      {
+        "id": 9,
+        "name": "HDD Write Q1",
+        "type": "output",
+        "outputs": []
+      },
+      {
+        "id": 10,
+        "name": "HDD Write Q2",
+        "type": "output",
+        "outputs": []
+      }
+    ]
   }
+
+
 ]
