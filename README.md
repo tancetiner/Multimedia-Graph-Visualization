@@ -1,7 +1,5 @@
 # Multimedia-Graph-Visualization
 
-## Project Description
-
 The **Multimedia-Graph-Visualization** project aims to simplify the complexities of filter graphs within GPAC by enabling real-time visualization of data flow within a web browser. This project focuses on creating an intuitive and interactive interface using responsive design principles, making it easier for users to understand and manipulate multimedia graphs effectively.
 
 This project is part of the [GPAC framework](https://gpac.io/).
