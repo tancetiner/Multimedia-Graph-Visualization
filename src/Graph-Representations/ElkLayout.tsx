@@ -94,24 +94,6 @@ const DagreLayout: React.FC<ElkLayoutProps> = ({
         >
           Horizontal Layout
         </button>
-        <button
-          onClick={() =>
-            getLayoutedElements({
-              "elk.algorithm": "org.eclipse.elk.radial",
-            })
-          }
-        >
-          Radial Layout
-        </button>
-        <button
-          onClick={() =>
-            getLayoutedElements({
-              "elk.algorithm": "org.eclipse.elk.force",
-            })
-          }
-        >
-          Force Layout
-        </button>
       </Panel>
       <Background gap={12} size={1} />
       <Controls />
