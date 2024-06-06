@@ -18,6 +18,7 @@ import DagreLayout from "./Graph-Representations/DagreLayout";
 import ELKLayout from "./Graph-Representations/ElkLayout";
 
 import exampleGraphs from "./Helpers/example-graphs.json";
+import CustomNode from "./Helpers/CustomNode";
 
 const returnPositions = (i: number) => {
   return { y: 40, x: i * 200 + 40 };
@@ -29,6 +30,7 @@ const blocksToNodes = (blocks: Block[]): Node[] => {
     return {
       id: block.id.toString(),
       position: returnPositions(i),
+      type: "customNode",
       data: { label: block.name, blockType: block.type },
     };
   });
@@ -55,6 +57,10 @@ const blocksToEdges = (blocks: Block[]): Edge[] => {
   console.log(edges);
 
   return edges;
+};
+
+const nodeTypes = {
+  customNode: CustomNode,
 };
 
 export default function App() {
@@ -150,7 +156,7 @@ export default function App() {
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
+    [setEdges]
   );
 
   const handleFileUpload = (event) => {
@@ -268,7 +274,7 @@ export default function App() {
                 onChange={(e) => setInputCount(Number(e.target.value))}
                 className="w-[calc(4rem)] p-2 border"
               >
-                {[1, 2, 3].map((count) => (
+                {Array.from({ length: 5 }, (_, i) => i + 1).map((count) => (
                   <option key={count} value={count}>
                     {count}
                   </option>
@@ -283,7 +289,7 @@ export default function App() {
                 onChange={(e) => setOutputCount(Number(e.target.value))}
                 className="w-[calc(4rem)] p-2 border"
               >
-                {[1, 2, 3].map((count) => (
+                {Array.from({ length: 5 }, (_, i) => i + 1).map((count) => (
                   <option key={count} value={count}>
                     {count}
                   </option>
@@ -298,7 +304,7 @@ export default function App() {
                 onChange={(e) => setBlockCount(Number(e.target.value))}
                 className="w-[calc(4rem)] p-2 border"
               >
-                {[1, 2, 3, 4, 5].map((count) => (
+                {Array.from({ length: 10 }, (_, i) => i + 1).map((count) => (
                   <option key={count} value={count}>
                     {count}
                   </option>
