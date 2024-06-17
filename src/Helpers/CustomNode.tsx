@@ -1,32 +1,51 @@
-import { Handle, Position } from "reactflow";
+import { Handle, Position, useUpdateNodeInternals } from "reactflow";
+import { BlockType } from "./FilterGraph";
+import { useEffect, useState } from "react";
 
-const CustomNode = ({ data }) => {
-  const inputs = data.inputs || [];
-  const outputs = data.outputs || [];
+interface CustomNodeProps {
+  data: {
+    label: string;
+    blockType: BlockType;
+    handleCount: number;
+    nodeId: string;
+  };
+}
+
+export default function CustomNode(props: CustomNodeProps) {
+  const updateNodeInternals = useUpdateNodeInternals();
+
+  const blockTypeToColor = {
+    [BlockType.INPUT]: "bg-blue-400",
+    [BlockType.OUTPUT]: "bg-green-400",
+    [BlockType.FILTER]: "bg-red-400",
+  };
+
+  const [handleCount, setHandleCount] = useState(0);
+
+  useEffect(() => {
+    setHandleCount(props.data.handleCount);
+    updateNodeInternals(props.data.nodeId);
+  }, [props.data.handleCount, updateNodeInternals]);
 
   return (
-    <div className="custom-node">
-      {inputs.map((input, index) => (
+    <>
+      <Handle type="target" position={Position.Left} />
+      <div
+        className={`py-4 px-2 rounded-lg ${
+          blockTypeToColor[props.data.blockType]
+        }`}
+      >
+        <label htmlFor="text">{props.data.label}</label>
+      </div>
+      {Array.from({ length: handleCount }).map((_, index) => (
         <Handle
-          key={`input-${index}`}
-          type="target"
-          position={Position.Left}
-          id={`input-${index}`}
-          style={{ top: `${(index + 1) * 20}px` }}
-        />
-      ))}
-      <div className="node-content">{data.label}</div>
-      {outputs.map((output, index) => (
-        <Handle
-          key={`output-${index}`}
+          key={index}
           type="source"
           position={Position.Right}
-          id={`output-${index}`}
-          style={{ top: `${(index + 1) * 20}px` }}
+          id={`handle-${index}`}
+          style={{ top: `${(index + 1) * (100 / (handleCount + 1))}%` }}
         />
       ))}
-    </div>
+    </>
   );
-};
-
-export default CustomNode;
+}

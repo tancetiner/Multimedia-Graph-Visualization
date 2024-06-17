@@ -10,6 +10,7 @@ import ReactFlow, {
   EdgeChange,
   Controls,
   MiniMap,
+  NodeTypes,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -55,6 +56,7 @@ interface ElkLayoutProps {
   edges: Edge[];
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
+  nodeTypes: NodeTypes;
 }
 
 const DagreLayout: React.FC<ElkLayoutProps> = ({
@@ -62,6 +64,7 @@ const DagreLayout: React.FC<ElkLayoutProps> = ({
   edges,
   onNodesChange,
   onEdgesChange,
+  nodeTypes,
 }) => {
   const { getLayoutedElements } = useLayoutedElements();
 
@@ -71,6 +74,7 @@ const DagreLayout: React.FC<ElkLayoutProps> = ({
       edges={edges}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
+      nodeTypes={nodeTypes}
       fitView
     >
       <Panel position="top-right" className="space-x-4">

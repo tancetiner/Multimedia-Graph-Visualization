@@ -10,26 +10,32 @@ import ReactFlow, {
   Background,
   Controls,
   MiniMap,
+  NodeTypes,
 } from "reactflow";
 
 import { BlockType } from "../Helpers/FilterGraph";
 
 import "reactflow/dist/style.css";
-import CustomNode from "../Helpers/CustomNode";
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 
-const getLayoutedElements = (nodes, edges, options) => {
+const getLayoutedElements = (
+  nodes: Node[],
+  edges: Edge[],
+  options: { direction: string }
+) => {
   g.setGraph({ rankdir: options.direction });
 
   nodes.forEach((node) => g.setNode(node.id, node));
-  edges.forEach((edge) => g.setEdge(edge.source, edge.target));
+  edges.forEach((edge) =>
+    g.setEdge(edge.source.toString(), edge.target.toString())
+  );
 
   Dagre.layout(g);
 
   const layoutedNodes = nodes.map((node) => {
     const { x, y } = g.node(node.id);
-    return { ...node, position: { x, y } };
+    return { ...node, position: { x, y }, width: node.width || 0 };
   });
 
   return {
@@ -90,10 +96,6 @@ const adjustNodePositions = (nodes: Node[]) => {
   return [...nonIOBlocks, ...inputNodes, ...outputNodes];
 };
 
-const nodeTypes = {
-  customNode: CustomNode,
-};
-
 interface DagreLayoutProps {
   nodes: Node[];
   edges: Edge[];
@@ -101,6 +103,7 @@ interface DagreLayoutProps {
   onEdgesChange: (changes: EdgeChange[]) => void;
   setNodes: (nodes: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
+  nodeTypes: NodeTypes;
 }
 
 const DagreLayout: React.FC<DagreLayoutProps> = ({
@@ -110,6 +113,7 @@ const DagreLayout: React.FC<DagreLayoutProps> = ({
   onEdgesChange,
   setNodes,
   setEdges,
+  nodeTypes,
 }) => {
   const { fitView } = useReactFlow();
 
@@ -118,7 +122,7 @@ const DagreLayout: React.FC<DagreLayoutProps> = ({
   }, []);
 
   const onLayout = useCallback(
-    (direction) => {
+    (direction: string) => {
       const layouted = getLayoutedElements(nodes, edges, { direction });
       const adjustedNodes = adjustNodePositions(layouted.nodes);
 
@@ -139,6 +143,7 @@ const DagreLayout: React.FC<DagreLayoutProps> = ({
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        nodeTypes={nodeTypes}
         fitView
       >
         <Panel position="top-right" className="space-x-4">

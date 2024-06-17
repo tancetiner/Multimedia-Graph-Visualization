@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ReactFlowProvider,
   useNodesState,
@@ -8,6 +8,7 @@ import {
   MarkerType,
   Connection,
   Node,
+  NodeTypes,
 } from "reactflow";
 
 import { initializeGraph, Block } from "./Helpers/FilterGraph";
@@ -31,7 +32,12 @@ const blocksToNodes = (blocks: Block[]): Node[] => {
       id: block.id.toString(),
       position: returnPositions(i),
       type: "customNode",
-      data: { label: block.name, blockType: block.type },
+      data: {
+        label: block.name,
+        blockType: block.type,
+        handleCount: block.outputs.length,
+        nodeId: block.id,
+      },
     };
   });
 };
@@ -40,27 +46,26 @@ const blocksToEdges = (blocks: Block[]): Edge[] => {
   const edges: Edge[] = [];
 
   blocks.forEach((block) => {
+    let sourceHandleIdx = 0;
     block.outputs.forEach((output) => {
       const targetId = output.path[output.path.length - 1];
       edges.push({
-        id: `e${block.id}-${targetId}`,
+        id: `e${block.id.replace(/\s+/g, "")}-${targetId.replace(/\s+/g, "")}`,
         source: block.id.toString(),
+        sourceHandle: `handle-${sourceHandleIdx.toString()}`,
         target: targetId.toString(),
         label: output.type.toString(),
         markerEnd: {
           type: MarkerType.ArrowClosed,
         },
       });
+      sourceHandleIdx++;
     });
   });
 
   console.log(edges);
 
   return edges;
-};
-
-const nodeTypes = {
-  customNode: CustomNode,
 };
 
 export default function App() {
@@ -74,6 +79,8 @@ export default function App() {
   const [layoutType, setLayoutType] = useState("No Layout");
   const [exampleGraphIdx, setExampleGraphIdx] = useState<number>(0);
 
+  const nodeTypes: NodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
+
   const returnLayoutView = (layout: string) => {
     if (layout == "No Layout") {
       return (
@@ -83,6 +90,7 @@ export default function App() {
           onConnect={onConnect}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          nodeTypes={nodeTypes}
         />
       );
     } else if (layout == "Hierarchy Layout") {
@@ -114,6 +122,7 @@ export default function App() {
           onEdgesChange={onEdgesChange}
           setNodes={setNodes}
           setEdges={setEdges}
+          nodeTypes={nodeTypes}
         />
       );
     } else if (layout == "ELK Layout") {
@@ -123,6 +132,7 @@ export default function App() {
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
+          nodeTypes={nodeTypes}
         />
       );
     }
@@ -137,7 +147,8 @@ export default function App() {
       resetGraph();
       return;
     }
-    setBlocks(exampleGraphs[exampleGraphIdx - 1].blocks);
+    let blocks = exampleGraphs[exampleGraphIdx - 1].blocks as Block[];
+    setBlocks(blocks);
   };
 
   const resetGraph = () => {
@@ -159,17 +170,16 @@ export default function App() {
     [setEdges]
   );
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (file.type !== "application/json") {
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || file.type !== "application/json") {
       alert("Please upload a valid JSON file.");
       return;
     }
-
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const json = JSON.parse(e.target.result as string);
+        const json = JSON.parse(e.target?.result as string);
         // Handle the JSON data
         console.log(json);
         setBlocks(json.blocks);
