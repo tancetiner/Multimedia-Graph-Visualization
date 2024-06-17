@@ -1,12 +1,12 @@
 export interface Block {
-  id: number;
+  id: string;
   name: string;
   outputs: Output[];
   type: BlockType;
 }
 
 export interface Output {
-  path: number[]; // Whole path of this link, including ids of blocks
+  path: string[]; // Whole path of this link, including ids of blocks
   type: LinkType;
 }
 
@@ -25,7 +25,6 @@ export enum BlockType {
 
 class Graph {
   private blocks: Block[] = [];
-  private nextId = 0;
 
   constructor(
     private numInputs: number,
@@ -45,31 +44,36 @@ class Graph {
     // Create input blocks
     for (let i = 0; i < numInputs; i++) {
       this.blocks.push({
-        id: idCounter++,
+        id: idCounter.toString(),
         name: `Input${i}`,
         type: BlockType.INPUT,
         outputs: [],
       });
+      idCounter++;
     }
 
     // Create filter blocks
     for (let i = 0; i < numFilters; i++) {
       this.blocks.push({
-        id: idCounter++,
+        id: idCounter.toString(),
         name: `Filter${i}`,
         type: BlockType.FILTER,
         outputs: [],
       });
+      idCounter++;
+
     }
 
     // Create output blocks
     for (let i = 0; i < numOutputs; i++) {
       this.blocks.push({
-        id: idCounter++,
+        id: idCounter.toString(),
         name: `Output${i}`,
         type: BlockType.OUTPUT,
         outputs: [],
       });
+      idCounter++;
+
     }
 
     this.connectBlocks();
@@ -143,7 +147,7 @@ class Graph {
     }
   }
 
-  private getExistingPath(blockId: number): number[] | null {
+  private getExistingPath(blockId: string): string[] | null {
     for (const block of this.blocks) {
       for (const output of block.outputs) {
         if (output.path[output.path.length - 1] === blockId) {
@@ -167,9 +171,9 @@ class Graph {
   }
 
   private ensurePath(
-    startId: number,
-    endId: number,
-    visited: Set<number> = new Set(),
+    startId: string,
+    endId: string,
+    visited: Set<string> = new Set(),
   ): boolean {
     if (startId === endId) return true;
     if (visited.has(startId)) return false;
@@ -213,9 +217,9 @@ class Graph {
   }
 
   private wouldCreateCycle(
-    startId: number,
-    endId: number,
-    visited: Set<number> = new Set(),
+    startId: string,
+    endId: string,
+    visited: Set<string> = new Set(),
   ): boolean {
     if (startId === endId) return true;
     if (visited.has(startId)) return false;
