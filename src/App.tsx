@@ -93,26 +93,6 @@ export default function App() {
           nodeTypes={nodeTypes}
         />
       );
-    } else if (layout == "Hierarchy Layout") {
-      return (
-        <HierarchyLayout
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          setEdges={setEdges}
-          setNodes={setNodes}
-        />
-      );
-    } else if (layout == "Force Layout") {
-      return (
-        <ForceLayout
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-        />
-      );
     } else if (layout == "Dagre Layout") {
       return (
         <DagreLayout
@@ -261,13 +241,7 @@ export default function App() {
                 onChange={(e) => setLayoutType(e.target.value)}
                 className="p-2 border"
               >
-                {[
-                  "No Layout",
-                  "Hierarchy Layout",
-                  "Force Layout",
-                  "Dagre Layout",
-                  "ELK Layout",
-                ].map((count) => (
+                {["No Layout", "Dagre Layout", "ELK Layout"].map((count) => (
                   <option key={count} value={count}>
                     {count}
                   </option>
