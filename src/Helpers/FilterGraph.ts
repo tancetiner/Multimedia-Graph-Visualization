@@ -1,7 +1,6 @@
 export interface Block {
   id: number;
   name: string;
-  inputs: number[];
   outputs: Output[];
   type: BlockType;
 }
@@ -49,7 +48,6 @@ class Graph {
         id: idCounter++,
         name: `Input${i}`,
         type: BlockType.INPUT,
-        inputs: [],
         outputs: [],
       });
     }
@@ -60,7 +58,6 @@ class Graph {
         id: idCounter++,
         name: `Filter${i}`,
         type: BlockType.FILTER,
-        inputs: [],
         outputs: [],
       });
     }
@@ -71,7 +68,6 @@ class Graph {
         id: idCounter++,
         name: `Output${i}`,
         type: BlockType.OUTPUT,
-        inputs: [],
         outputs: [],
       });
     }
@@ -121,7 +117,6 @@ class Graph {
             path: newPath,
             type: this.getRandomLinkType(),
           });
-          filter.inputs.push(inputBlock.id);
         }
       }
     }
@@ -142,7 +137,6 @@ class Graph {
               path: newPath,
               type: this.getRandomLinkType(),
             });
-            outputBlock.inputs.push(filter.id);
           }
         }
       }
@@ -208,7 +202,6 @@ class Graph {
             nextBlock.id,
           ];
           block.outputs.push({ path: newPath, type: this.getRandomLinkType() });
-          nextBlock.inputs.push(block.id);
           if (this.ensurePath(nextBlock.id, endId, visited)) {
             return true;
           }
@@ -254,7 +247,6 @@ class Graph {
   public printGraph() {
     for (const block of this.blocks) {
       console.log(`Block ${block.name} (ID: ${block.id}, Type: ${block.type})`);
-      console.log(`  Inputs: ${block.inputs.join(", ")}`);
       console.log(`  Outputs:`);
       for (const output of block.outputs) {
         console.log(
