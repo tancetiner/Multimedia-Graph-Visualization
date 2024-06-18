@@ -104,6 +104,7 @@ interface DagreLayoutProps {
   setNodes: (nodes: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
   nodeTypes: NodeTypes;
+  edgeTypes: any;
 }
 
 const DagreLayout: React.FC<DagreLayoutProps> = ({
@@ -114,6 +115,7 @@ const DagreLayout: React.FC<DagreLayoutProps> = ({
   setNodes,
   setEdges,
   nodeTypes,
+  edgeTypes,
 }) => {
   const { fitView } = useReactFlow();
 
@@ -144,6 +146,7 @@ const DagreLayout: React.FC<DagreLayoutProps> = ({
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         fitView
       >
         <Panel position="top-right" className="space-x-4">

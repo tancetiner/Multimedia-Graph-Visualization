@@ -10,6 +10,7 @@ import ReactFlow, {
   EdgeChange,
   Connection,
   NodeTypes,
+  EdgeTypes,
 } from "reactflow";
 import "reactflow/dist/style.css";
 
@@ -20,6 +21,7 @@ interface NoLayoutProps {
   onEdgesChange: (changes: EdgeChange[]) => void;
   onConnect: (connection: Connection) => void;
   nodeTypes: NodeTypes;
+  edgeTypes: EdgeTypes;
 }
 
 const NoLayout: React.FC<NoLayoutProps> = ({
@@ -29,6 +31,7 @@ const NoLayout: React.FC<NoLayoutProps> = ({
   onEdgesChange,
   onConnect,
   nodeTypes,
+  edgeTypes,
 }) => {
   return (
     <div className="h-full w-full">
@@ -39,6 +42,7 @@ const NoLayout: React.FC<NoLayoutProps> = ({
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
       >
         <Controls />
         <MiniMap />

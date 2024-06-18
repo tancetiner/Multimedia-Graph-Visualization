@@ -57,6 +57,7 @@ interface ElkLayoutProps {
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
   nodeTypes: NodeTypes;
+  edgeTypes: any;
 }
 
 const DagreLayout: React.FC<ElkLayoutProps> = ({
@@ -65,6 +66,7 @@ const DagreLayout: React.FC<ElkLayoutProps> = ({
   onNodesChange,
   onEdgesChange,
   nodeTypes,
+  edgeTypes,
 }) => {
   const { getLayoutedElements } = useLayoutedElements();
 
@@ -75,6 +77,7 @@ const DagreLayout: React.FC<ElkLayoutProps> = ({
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
       fitView
     >
       <Panel position="top-right" className="space-x-4">

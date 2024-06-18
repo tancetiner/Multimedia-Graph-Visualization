@@ -13,13 +13,12 @@ import {
 
 import { initializeGraph, Block } from "./Helpers/FilterGraph";
 import NoLayout from "./Graph-Representations/NoLayout";
-import HierarchyLayout from "./Graph-Representations/HierarchyLayout";
-import ForceLayout from "./Graph-Representations/ForceLayout";
 import DagreLayout from "./Graph-Representations/DagreLayout";
 import ELKLayout from "./Graph-Representations/ElkLayout";
 
 import exampleGraphs from "./Helpers/example-graphs.json";
 import CustomNode from "./Helpers/CustomNode";
+import CustomEdge from "./Helpers/CustomEdge";
 
 const returnPositions = (i: number) => {
   return { y: 40, x: i * 200 + 40 };
@@ -51,12 +50,16 @@ const blocksToEdges = (blocks: Block[]): Edge[] => {
       const targetId = output.path[output.path.length - 1];
       edges.push({
         id: `e${block.id.replace(/\s+/g, "")}-${targetId.replace(/\s+/g, "")}`,
+        type: "customEdge",
         source: block.id.toString(),
         sourceHandle: `handle-${sourceHandleIdx.toString()}`,
         target: targetId.toString(),
         label: output.type.toString(),
         markerEnd: {
           type: MarkerType.ArrowClosed,
+        },
+        data: {
+          linkType: output.type,
         },
       });
       sourceHandleIdx++;
@@ -80,6 +83,7 @@ export default function App() {
   const [exampleGraphIdx, setExampleGraphIdx] = useState<number>(0);
 
   const nodeTypes: NodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
+  const edgeTypes: any = useMemo(() => ({ customEdge: CustomEdge }), []);
 
   const returnLayoutView = (layout: string) => {
     if (layout == "No Layout") {
@@ -91,6 +95,7 @@ export default function App() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
         />
       );
     } else if (layout == "Dagre Layout") {
@@ -103,6 +108,7 @@ export default function App() {
           setNodes={setNodes}
           setEdges={setEdges}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
         />
       );
     } else if (layout == "ELK Layout") {
@@ -113,12 +119,14 @@ export default function App() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
         />
       );
     }
   };
 
   const setRandomGraph = () => {
+    resetGraph();
     setBlocks(initializeGraph(inputCount, outputCount, blockCount));
   };
 

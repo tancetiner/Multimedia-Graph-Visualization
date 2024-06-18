@@ -1,30 +1,55 @@
-// CustomEdge.tsx
-import { getBezierPath, getMarkerEnd } from "reactflow";
-import { gradientColors } from "./constants";
+import React, { useEffect } from "react";
+import { BaseEdge, EdgeLabelRenderer, getSimpleBezierPath } from "reactflow";
+import { LinkType } from "./FilterGraph";
 
-const CustomEdge = ({
+const linkTypeToColor: { [key in LinkType]: string } = {
+  [LinkType.audio]: "#ff0000",
+  [LinkType.video]: "#00ff00",
+  [LinkType.file]: "#0000ff",
+  [LinkType.text]: "#ff00ff",
+};
+
+interface CustomEdgeProps {
+  id: string;
+  sourceX: number;
+  sourceY: number;
+  targetX: number;
+  targetY: number;
+  label: string;
+  data: { linkType: LinkType };
+}
+
+const CustomEdge: React.FC<CustomEdgeProps> = ({
   id,
   sourceX,
   sourceY,
   targetX,
   targetY,
-  sourcePosition,
-  targetPosition,
-  style = {},
-  markerEnd,
+  label,
   data,
 }) => {
-  const [edgePath] = getBezierPath({
+  const [edgePath, labelX, labelY] = getSimpleBezierPath({
     sourceX,
     sourceY,
     targetX,
     targetY,
-    sourcePosition,
-    targetPosition,
   });
 
   const gradientId = `gradient-${id}`;
-  const [startColor, endColor] = gradientColors[data.type] || ["#000", "#000"];
+
+  useEffect(() => {
+    console.info(
+      "CustomEdge rendered",
+      id,
+      "at location",
+      sourceX,
+      sourceY,
+      targetX,
+      targetY,
+      "with label",
+      label
+    );
+  }, [id]);
 
   return (
     <>
@@ -37,20 +62,26 @@ const CustomEdge = ({
           x2={targetX}
           y2={targetY}
         >
-          <stop offset="0%" stopColor={startColor} />
-          <stop offset="100%" stopColor={endColor} />
+          <stop offset="0%" stopColor={linkTypeToColor[data.linkType]} />
+          <stop offset="100%" stopColor="#000000" />
         </linearGradient>
       </defs>
-      <path
+      <BaseEdge
         id={id}
-        style={style}
-        className="react-flow__edge-path"
-        d={edgePath}
-        markerEnd={getMarkerEnd(markerEnd)}
-        stroke={`url(#${gradientId})`}
-        strokeWidth={2}
-        fill="none"
+        path={edgePath}
+        style={{ stroke: `url(#${gradientId})`, strokeWidth: 2 }}
       />
+      <EdgeLabelRenderer>
+        <label
+          className="nodrag nopan bg-slate-500 text-white p-2 rounded-3xl"
+          style={{
+            position: "absolute",
+            transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
+          }}
+        >
+          {label}
+        </label>
+      </EdgeLabelRenderer>
     </>
   );
 };
