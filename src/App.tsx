@@ -25,9 +25,10 @@ const returnPositions = (i: number) => {
 };
 
 const blocksToNodes = (blocks: Block[]): Node[] => {
-  console.log(blocks);
-  return blocks.map((block, i) => {
-    return {
+  const nodes: Node[] = [];
+
+  blocks.forEach((block, i) => {
+    nodes.push({
       id: block.id.toString(),
       position: returnPositions(i),
       type: "customNode",
@@ -37,8 +38,12 @@ const blocksToNodes = (blocks: Block[]): Node[] => {
         handleCount: block.outputs.length,
         nodeId: block.id,
       },
-    };
+    });
   });
+
+  console.info(nodes);
+
+  return nodes;
 };
 
 const blocksToEdges = (blocks: Block[]): Edge[] => {
@@ -85,73 +90,74 @@ export default function App() {
   const nodeTypes: NodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
   const edgeTypes: any = useMemo(() => ({ customEdge: CustomEdge }), []);
 
-  const returnLayoutView = (layout: string) => {
-    if (layout == "No Layout") {
-      return (
-        <NoLayout
-          nodes={nodes}
-          edges={edges}
-          onConnect={onConnect}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-        />
-      );
-    } else if (layout == "Dagre Layout") {
-      return (
-        <DagreLayout
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          setNodes={setNodes}
-          setEdges={setEdges}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-        />
-      );
-    } else if (layout == "ELK Layout") {
-      return (
-        <ELKLayout
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-        />
-      );
-    }
-  };
+  const returnLayoutView = useCallback(
+    (layout: string) => {
+      switch (layout) {
+        case "Dagre Layout":
+          return (
+            <DagreLayout
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              setNodes={setNodes}
+              setEdges={setEdges}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+            />
+          );
+        case "ELK Layout":
+          return (
+            <ELKLayout
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+            />
+          );
+        default:
+          return (
+            <NoLayout
+              nodes={nodes}
+              edges={edges}
+              onConnect={onConnect}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+            />
+          );
+      }
+    },
+    [nodes, edges, onNodesChange, onEdgesChange, nodeTypes, edgeTypes]
+  );
 
-  const setRandomGraph = () => {
+  const setRandomGraph = useCallback(() => {
     resetGraph();
     setBlocks(initializeGraph(inputCount, outputCount, blockCount));
-  };
+  }, [inputCount, outputCount, blockCount]);
 
-  const setExampleGraph = () => {
-    if (exampleGraphIdx == 0) {
+  const setExampleGraph = useCallback(() => {
+    if (exampleGraphIdx === 0) {
       resetGraph();
-      return;
+    } else {
+      const blocks = exampleGraphs[exampleGraphIdx - 1].blocks as Block[];
+      setBlocks(blocks);
     }
-    let blocks = exampleGraphs[exampleGraphIdx - 1].blocks as Block[];
-    setBlocks(blocks);
-  };
-
-  const resetGraph = () => {
-    setNodes([]);
-    setEdges([]);
-  };
-
-  useEffect(() => {
-    setExampleGraph();
   }, [exampleGraphIdx]);
 
+  const resetGraph = useCallback(() => {
+    setNodes([]);
+    setEdges([]);
+  }, [setNodes, setEdges]);
+
   useEffect(() => {
+    resetGraph();
     setNodes(blocksToNodes(blocks));
     setEdges(blocksToEdges(blocks));
-  }, [blocks]);
+  }, [blocks, resetGraph]);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -168,8 +174,6 @@ export default function App() {
     reader.onload = (e) => {
       try {
         const json = JSON.parse(e.target?.result as string);
-        // Handle the JSON data
-        console.log(json);
         setBlocks(json.blocks);
       } catch (err) {
         alert("Failed to parse JSON file.");
@@ -187,7 +191,7 @@ export default function App() {
           </span>
         </div>
         <div className="h-4/5 w-full">
-          {nodes.length != 0 ? (
+          {nodes.length ? (
             returnLayoutView(layoutType)
           ) : (
             <div className="flex items-center justify-center h-full w-full text-2xl text-slate-600">
@@ -203,7 +207,6 @@ export default function App() {
                     3) Click on the "New Graph" button to create a new graph
                     with the specified parameters.
                   </li>
-
                   <li>
                     Then, select a layout type from the dropdown to visualize
                     the graph.
@@ -225,7 +228,7 @@ export default function App() {
               >
                 {["Select Graph", ...exampleGraphs].map((graph, idx) => (
                   <option key={idx} value={idx}>
-                    {typeof graph == "string" ? graph : graph.title}
+                    {typeof graph === "string" ? graph : graph.title}
                   </option>
                 ))}
               </select>
