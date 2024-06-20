@@ -191,7 +191,7 @@ export default function App() {
       <div className="h-screen w-screen">
         <div className="h-[calc(4rem)] bg-blue-200 w-full flex items-center">
           <span className="text-black text-2xl font-semibold mx-auto">
-            Multimedia Graph Representation
+            Multimedia Graph Visualization
           </span>
         </div>
         <div className="h-4/5 w-full">
