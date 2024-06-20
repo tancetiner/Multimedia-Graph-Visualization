@@ -15,7 +15,6 @@ interface CustomEdgeProps {
   sourceY: number;
   targetX: number;
   targetY: number;
-  label: string;
   data: { linkType: LinkType };
 }
 
@@ -25,7 +24,6 @@ const CustomEdge: React.FC<CustomEdgeProps> = ({
   sourceY,
   targetX,
   targetY,
-  label,
   data,
 }) => {
   const [edgePath, labelX, labelY] = getSimpleBezierPath({
@@ -36,20 +34,6 @@ const CustomEdge: React.FC<CustomEdgeProps> = ({
   });
 
   const gradientId = `gradient-${id}`;
-
-  useEffect(() => {
-    console.info(
-      "CustomEdge rendered",
-      id,
-      "at location",
-      sourceX,
-      sourceY,
-      targetX,
-      targetY,
-      "with label",
-      label
-    );
-  }, [id]);
 
   return (
     <>
@@ -79,7 +63,7 @@ const CustomEdge: React.FC<CustomEdgeProps> = ({
             transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
           }}
         >
-          {label}
+          {data.linkType.toString()}
         </label>
       </EdgeLabelRenderer>
     </>

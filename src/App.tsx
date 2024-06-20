@@ -5,7 +5,6 @@ import {
   useEdgesState,
   addEdge,
   Edge,
-  MarkerType,
   Connection,
   Node,
   NodeTypes,
@@ -53,16 +52,15 @@ const blocksToEdges = (blocks: Block[]): Edge[] => {
     let sourceHandleIdx = 0;
     block.outputs.forEach((output) => {
       const targetId = output.path[output.path.length - 1];
+      const edgeId = `e-${block.id
+        .replace(/\s+/g, "_")
+        .toLowerCase()}-${targetId.replace(/\s+/g, "_").toLowerCase()}`;
       edges.push({
-        id: `e${block.id.replace(/\s+/g, "")}-${targetId.replace(/\s+/g, "")}`,
+        id: edgeId,
         type: "customEdge",
         source: block.id.toString(),
         sourceHandle: `handle-${sourceHandleIdx.toString()}`,
         target: targetId.toString(),
-        label: output.type.toString(),
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-        },
         data: {
           linkType: output.type,
         },
@@ -81,10 +79,10 @@ export default function App() {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge[]>([]);
   const [blocks, setBlocks] = useState<Block[]>([]);
 
-  const [inputCount, setInputCount] = useState(1);
-  const [outputCount, setOutputCount] = useState(1);
-  const [blockCount, setBlockCount] = useState(1);
-  const [layoutType, setLayoutType] = useState("No Layout");
+  const [inputCount, setInputCount] = useState<number>(1);
+  const [outputCount, setOutputCount] = useState<number>(1);
+  const [blockCount, setBlockCount] = useState<number>(1);
+  const [layoutType, setLayoutType] = useState<string>("No Layout");
   const [exampleGraphIdx, setExampleGraphIdx] = useState<number>(0);
 
   const nodeTypes: NodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
@@ -140,9 +138,8 @@ export default function App() {
   }, [inputCount, outputCount, blockCount]);
 
   const setExampleGraph = useCallback(() => {
-    if (exampleGraphIdx === 0) {
-      resetGraph();
-    } else {
+    resetGraph();
+    if (exampleGraphIdx > 0) {
       const blocks = exampleGraphs[exampleGraphIdx - 1].blocks as Block[];
       setBlocks(blocks);
     }

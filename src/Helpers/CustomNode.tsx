@@ -20,7 +20,7 @@ export default function CustomNode(props: CustomNodeProps) {
     [BlockType.FILTER]: "bg-red-400",
   };
 
-  const [handleCount, setHandleCount] = useState(0);
+  const [handleCount, setHandleCount] = useState(props.data.handleCount);
 
   useEffect(() => {
     setHandleCount(props.data.handleCount);

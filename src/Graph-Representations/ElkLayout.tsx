@@ -25,7 +25,7 @@ const useLayoutedElements = () => {
     "elk.spacing.nodeNode": 80,
   };
 
-  const getLayoutedElements = useCallback((options) => {
+  const getLayoutedElements = useCallback((options: Record<string, any>) => {
     const layoutOptions = { ...defaultOptions, ...options };
     const graph = {
       id: "root",
@@ -35,16 +35,19 @@ const useLayoutedElements = () => {
     };
 
     elk.layout(graph).then(({ children }) => {
-      // By mutating the children in-place we saves ourselves from creating a
-      // needless copy of the nodes array.
-      children.forEach((node) => {
-        node.position = { x: node.x, y: node.y };
-      });
+      if (children) {
+        // By mutating the children in-place we saves ourselves from creating a
+        // needless copy of the nodes array.
+        children.forEach((node) => {
+          node.position = { x: node.x, y: node.y };
+          node.width = node.width || 0; // Handle null width
+        });
 
-      setNodes(children);
-      window.requestAnimationFrame(() => {
-        fitView();
-      });
+        setNodes(children);
+        window.requestAnimationFrame(() => {
+          fitView();
+        });
+      }
     });
   }, []);
 
