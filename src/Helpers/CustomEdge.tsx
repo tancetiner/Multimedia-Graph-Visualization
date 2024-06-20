@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BaseEdge, EdgeLabelRenderer, getSimpleBezierPath } from "reactflow";
 import { LinkType } from "./FilterGraph";
 

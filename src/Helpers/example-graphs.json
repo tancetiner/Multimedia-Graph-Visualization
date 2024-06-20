@@ -620,5 +620,116 @@
         "outputs": []
       }
     ]
+  },
+  {
+    "title": "Simple Graph with Grouping",
+    "description": "Really simple graph with one input, four filters and one output. 3 filters are grouped together.",
+    "blocks": [
+      {
+        "id": "input0",
+        "name": "Input0",
+        "type": "input",
+        "outputs": [
+          {
+            "path": [
+              "input0",
+              "filter0"
+            ],
+            "type": "audio"
+          },
+          {
+            "path": [
+              "input0",
+              "filter1"
+            ],
+            "type": "video"
+          },
+          {
+            "path": [
+              "input0",
+              "filter2"
+            ],
+            "type": "video"
+          },
+          {
+            "path": [
+              "input0",
+              "filter3"
+            ],
+            "type": "video"
+          }
+
+        ]
+      },
+      {
+        "id": "filter0",
+        "name": "Filter0",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [
+              "input0",
+              "filter0",
+              "output0"
+            ],
+            "type": "video"
+          }
+        ]
+      },
+      {
+        "id": "filter1",
+        "name": "Filter1",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [
+              "input0",
+              "filter1",
+              "output0"
+            ],
+            "type": "audio"
+          }
+        ],
+        "group": "Group 1"
+      },
+      {
+        "id": "filter2",
+        "name": "Filter2",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [
+              "input0",
+              "filter1",
+              "output0"
+            ],
+            "type": "audio"
+          }
+        ],
+        "group": "Group 1"
+      },
+      {
+        "id": "filter3",
+        "name": "Filter3",
+        "type": "filter",
+        "outputs": [
+          {
+            "path": [
+              "input0",
+              "filter1",
+              "output0"
+            ],
+            "type": "audio"
+          }
+        ],
+        "group": "Group 1"
+      },
+      {
+        "id": "output0",
+        "name": "Output0",
+        "type": "output",
+        "outputs": []
+      }
+    ]
   }
 ]

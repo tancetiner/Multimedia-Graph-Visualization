@@ -3,6 +3,7 @@ export interface Block {
   name: string;
   outputs: Output[];
   type: BlockType;
+  group?: string;
 }
 
 export interface Output {
@@ -21,6 +22,7 @@ export enum BlockType {
   FILTER = "filter",
   INPUT = "input",
   OUTPUT = "output",
+  GROUP = "group",
 }
 
 class Graph {
