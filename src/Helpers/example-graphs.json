@@ -4,58 +4,58 @@
     "description": "Really simple graph with one input, two filters and one output",
     "blocks": [
       {
-        "id": "HDD Read",
+        "id": "input0",
         "name": "Input0",
         "type": "input",
         "outputs": [
           {
             "path": [
-              "HDD Read",
-              "Demultiplexer"
+              "input0",
+              "filter0"
             ],
             "type": "video"
           },
           {
             "path": [
-              "HDD Read",
-              "Video Decoder"
+              "input0",
+              "filter1"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Demultiplexer",
+        "id": "filter0",
         "name": "Filter0",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "HDD Read",
-              "Demultiplexer",
-              "Audio Decoder"
+              "input0",
+              "filter0",
+              "output0"
             ],
             "type": "video"
           }
         ]
       },
       {
-        "id": "Video Decoder",
+        "id": "filter1",
         "name": "Filter1",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "HDD Read",
-              "Video Decoder",
-              "Audio Decoder"
+              "input0",
+              "filter1",
+              "output0"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Audio Decoder",
+        "id": "output0",
         "name": "Output0",
         "type": "output",
         "outputs": []
@@ -67,88 +67,88 @@
     "description": "A bit more complicated graph with one input, three filters and two output",
     "blocks": [
       {
-        "id": "HDD Read",
+        "id": "input0",
         "name": "Input0",
         "type": "input",
         "outputs": [
           {
             "path": [
-              "HDD Read",
-              "Demultiplexer"
+              "input0",
+              "filter0"
             ],
             "type": "video"
           },
           {
             "path": [
-              "HDD Read",
-              "Video Decoder"
+              "input0",
+              "filter1"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Demultiplexer",
+        "id": "filter0",
         "name": "Filter0",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "HDD Read",
-              "Demultiplexer",
-              "Video Encoder Q1"
+              "input0",
+              "filter0",
+              "output0"
             ],
             "type": "video"
           }
         ]
       },
       {
-        "id": "Video Decoder",
+        "id": "filter1",
         "name": "Filter1",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Demultiplexer",
-              "Video Decoder",
-              "Video Encoder Q1"
+              "filter0",
+              "filter1",
+              "output0"
             ],
             "type": "audio"
           },
           {
             "path": [
-              "Demultiplexer",
-              "Video Decoder",
-              "Audio Decoder"
+              "filter0",
+              "filter1",
+              "filter2"
             ],
             "type": "video"
           }
         ]
       },
       {
-        "id": "Audio Decoder",
+        "id": "filter2",
         "name": "Filter2",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "HDD Read",
-              "Video Decoder",
-              "Audio Decoder",
-              "Video Encoder Q2"
+              "input0",
+              "filter1",
+              "filter2",
+              "output1"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Video Encoder Q1",
+        "id": "output0",
         "name": "Output0",
         "type": "output",
         "outputs": []
       },
       {
-        "id": "Video Encoder Q2",
+        "id": "output1",
         "name": "Output1",
         "type": "output",
         "outputs": []
@@ -160,71 +160,71 @@
     "description": "Audio video playback from local file",
     "blocks": [
       {
-        "id": "HDD Read",
+        "id": "hdd_read",
         "name": "HDD Read",
         "type": "input",
         "outputs": [
           {
             "path": [
-              "Demultiplexer"
+              "demultiplexer"
             ],
             "type": "file"
           }
         ]
       },
       {
-        "id": "Demultiplexer",
+        "id": "demultiplexer",
         "name": "Demultiplexer",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Video Decoder"
+              "video_decoder"
             ],
             "type": "video"
           },
           {
             "path": [
-              "Audio Decoder"
+              "audio_decoder"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Video Decoder",
+        "id": "video_decoder",
         "name": "Video Decoder",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Video Encoder Q1"
+              "video_output"
             ],
             "type": "video"
           }
         ]
       },
       {
-        "id": "Audio Decoder",
+        "id": "audio_decoder",
         "name": "Audio Decoder",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Video Encoder Q2"
+              "audio_output"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Video Encoder Q1",
+        "id": "video_output",
         "name": "Video Output",
         "type": "output",
         "outputs": []
       },
       {
-        "id": "Video Encoder Q2",
+        "id": "audio_output",
         "name": "Audio Output",
         "type": "output",
         "outputs": []
@@ -236,123 +236,123 @@
     "description": "Audio video playback from HTTP streaming source",
     "blocks": [
       {
-        "id": "HDD Read",
+        "id": "manifest_read",
         "name": "Manifest Read",
         "type": "input",
         "outputs": [
           {
             "path": [
-              "Video Encoder Q2"
+              "has_client"
             ],
             "type": "file"
           }
         ]
       },
       {
-        "id": "Demultiplexer",
+        "id": "videofetch",
         "name": "VideoFetch",
         "type": "input",
         "outputs": [
           {
             "path": [
-              "Audio Decoder"
+              "video_demultiplexer"
             ],
             "type": "file"
           }
         ]
       },
       {
-        "id": "Video Decoder",
+        "id": "audiofetch",
         "name": "AudioFetch",
         "type": "input",
         "outputs": [
           {
             "path": [
-              "Video Encoder Q1"
+              "audio_demultiplexer"
             ],
             "type": "file"
           }
         ]
       },
       {
-        "id": "Audio Decoder",
+        "id": "video_demultiplexer",
         "name": "Video Demultiplexer",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Video Encoder Q2"
+              "has_client"
             ],
             "type": "video"
           }
         ]
       },
       {
-        "id": "Video Encoder Q1",
+        "id": "audio_demultiplexer",
         "name": "Audio Demultiplexer",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Video Encoder Q2"
+              "has_client"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Video Encoder Q2",
+        "id": "has_client",
         "name": "HAS Client",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Audio Encoder"
+              "video_decoder"
             ],
             "type": "video"
           },
           {
             "path": [
-              "Multiplexer Q1"
+              "audio_decoder"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Audio Encoder",
+        "id": "video_decoder",
         "name": "Video Decoder",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Multiplexer Q2"
+              "video_output"
             ],
             "type": "video"
           }
         ]
       },
       {
-        "id": "Multiplexer Q1",
+        "id": "audio_decoder",
         "name": "Audio Decoder",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "HDD Write Q1"
+              "audio_output"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Multiplexer Q2",
+        "id": "video_output",
         "name": "Video Output",
         "type": "output",
         "outputs": []
       },
       {
-        "id": "HDD Write Q1",
+        "id": "audio_output",
         "name": "Audio Output",
         "type": "output",
         "outputs": []
@@ -364,104 +364,104 @@
     "description": "Audio video transcoding of a local file",
     "blocks": [
       {
-        "id": "HDD Read",
+        "id": "hdd_read",
         "name": "HDD Read",
         "type": "input",
         "outputs": [
           {
             "path": [
-              "Demultiplexer"
+              "demultiplexer"
             ],
             "type": "file"
           }
         ]
       },
       {
-        "id": "Demultiplexer",
+        "id": "demultiplexer",
         "name": "Demultiplexer",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Video Decoder"
+              "videodecoder"
             ],
             "type": "video"
           },
           {
             "path": [
-              "Audio Decoder"
+              "audiodecoder"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Video Decoder",
+        "id": "videodecoder",
         "name": "VideoDecoder",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Video Encoder Q1"
+              "videoencoder"
             ],
             "type": "video"
           }
         ]
       },
       {
-        "id": "Audio Decoder",
+        "id": "audiodecoder",
         "name": "AudioDecoder",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Video Encoder Q2"
+              "audioencoder"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Video Encoder Q1",
+        "id": "videoencoder",
         "name": "VideoEncoder",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Audio Encoder"
+              "multiplexer"
             ],
             "type": "video"
           }
         ]
       },
       {
-        "id": "Video Encoder Q2",
+        "id": "audioencoder",
         "name": "AudioEncoder",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Audio Encoder"
+              "multiplexer"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Audio Encoder",
+        "id": "multiplexer",
         "name": "Multiplexer",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Multiplexer Q1"
+              "hdd_write"
             ],
             "type": "file"
           }
         ]
       },
       {
-        "id": "Multiplexer Q1",
+        "id": "hdd_write",
         "name": "HDD Write",
         "type": "output",
         "outputs": []
@@ -473,148 +473,148 @@
     "description": "Audio video transcoding in two qualities of a file",
     "blocks": [
       {
-        "id": "HDD Read",
+        "id": "hdd_read",
         "name": "HDD Read",
         "type": "input",
         "outputs": [
           {
             "path": [
-              "Demultiplexer"
+              "demultiplexer"
             ],
             "type": "file"
           }
         ]
       },
       {
-        "id": "Demultiplexer",
+        "id": "demultiplexer",
         "name": "Demultiplexer",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Video Decoder"
+              "video_decoder"
             ],
             "type": "video"
           },
           {
             "path": [
-              "Audio Decoder"
+              "audio_decoder"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Video Decoder",
+        "id": "video_decoder",
         "name": "Video Decoder",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Video Encoder Q1"
+              "video_encoder_q1"
             ],
             "type": "video"
           },
           {
             "path": [
-              "Video Encoder Q2"
+              "video_encoder_q2"
             ],
             "type": "video"
           }
         ]
       },
       {
-        "id": "Audio Decoder",
+        "id": "audio_decoder",
         "name": "Audio Decoder",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Audio Encoder"
+              "audio_encoder"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Video Encoder Q1",
+        "id": "video_encoder_q1",
         "name": "Video Encoder Q1",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Multiplexer Q1"
+              "multiplexer_q1"
             ],
             "type": "video"
           }
         ]
       },
       {
-        "id": "Video Encoder Q2",
+        "id": "video_encoder_q2",
         "name": "Video Encoder Q2",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Multiplexer Q2"
+              "multiplexer_q2"
             ],
             "type": "video"
           }
         ]
       },
       {
-        "id": "Audio Encoder",
+        "id": "audio_encoder",
         "name": "Audio Encoder",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "Multiplexer Q1"
+              "multiplexer_q1"
             ],
             "type": "audio"
           },
           {
             "path": [
-              "Multiplexer Q2"
+              "multiplexer_q2"
             ],
             "type": "audio"
           }
         ]
       },
       {
-        "id": "Multiplexer Q1",
+        "id": "multiplexer_q1",
         "name": "Multiplexer Q1",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "HDD Write Q1"
+              "hdd_write_q1"
             ],
             "type": "file"
           }
         ]
       },
       {
-        "id": "Multiplexer Q2",
+        "id": "multiplexer_q2",
         "name": "Multiplexer Q2",
         "type": "filter",
         "outputs": [
           {
             "path": [
-              "HDD Write Q2"
+              "hdd_write_q2"
             ],
             "type": "file"
           }
         ]
       },
       {
-        "id": "HDD Write Q1",
+        "id": "hdd_write_q1",
         "name": "HDD Write Q1",
         "type": "output",
         "outputs": []
       },
       {
-        "id": "HDD Write Q2",
+        "id": "hdd_write_q2",
         "name": "HDD Write Q2",
         "type": "output",
         "outputs": []
