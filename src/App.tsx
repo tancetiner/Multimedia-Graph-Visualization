@@ -148,6 +148,10 @@ export default function App() {
     }
   }, [exampleGraphIdx]);
 
+  useEffect(() => {
+    setExampleGraph();
+  }, [exampleGraphIdx, setExampleGraph]);
+
   const resetGraph = useCallback(() => {
     setNodes([]);
     setEdges([]);
