@@ -23,21 +23,56 @@ const returnPositions = (i: number) => {
   return { y: 40, x: i * 200 + 40 };
 };
 
+const nameToId = (name: string): string => {
+  return name.replace(/\s+/g, "_").toLowerCase();
+};
+
 const blocksToNodes = (blocks: Block[]): Node[] => {
   const nodes: Node[] = [];
+  const groups: Set<string> = new Set();
 
   blocks.forEach((block, i) => {
-    nodes.push({
-      id: block.id.toString(),
-      position: returnPositions(i),
-      type: "customNode",
-      data: {
-        label: block.name,
-        blockType: block.type,
-        handleCount: block.outputs.length,
-        nodeId: block.id,
-      },
-    });
+    // if block has a group, create a new group node
+    if (block.group) {
+      if (!groups.has(block.group)) {
+        groups.add(block.group); // if group doesn't exist in the set, add it
+        nodes.push({
+          id: nameToId(block.group),
+          position: returnPositions(i),
+          type: "customNode",
+          data: {
+            label: block.group,
+            blockType: block.type,
+          },
+        });
+      }
+
+      nodes.push({
+        id: block.id.toString(),
+        position: returnPositions(i),
+        type: "customNode",
+        parentId: nameToId(block.group),
+        extent: "parent",
+        data: {
+          label: block.name,
+          blockType: block.type,
+          handleCount: block.outputs.length,
+          nodeId: block.id,
+        },
+      });
+    } else {
+      nodes.push({
+        id: block.id.toString(),
+        position: returnPositions(i),
+        type: "customNode",
+        data: {
+          label: block.name,
+          blockType: block.type,
+          handleCount: block.outputs.length,
+          nodeId: block.id,
+        },
+      });
+    }
   });
 
   console.info(nodes);
@@ -51,15 +86,29 @@ const blocksToEdges = (blocks: Block[]): Edge[] => {
   blocks.forEach((block) => {
     let sourceHandleIdx = 0;
     block.outputs.forEach((output) => {
-      const targetId = output.path[output.path.length - 1];
-      const edgeId = `e-${block.id
-        .replace(/\s+/g, "_")
-        .toLowerCase()}-${targetId.replace(/\s+/g, "_").toLowerCase()}`;
+      let targetId = output.path[output.path.length - 1];
+      const edgeId = `e-${nameToId(block.id)}-${nameToId(targetId)}`;
+      // get the block that has the targetId in their id field
+      const targetBlock = blocks.filter((b) => b.id === targetId)[0];
+
+      // if the target block has a group field, set the targetId to the group id
+      if (targetBlock.group) {
+        targetId = nameToId(targetBlock.group);
+      }
+
+      // if the block has a group field, set the sourceId to the group id
+      let sourceId = block.id.toString();
+      let sourceHandle = `handle-${sourceHandleIdx.toString()}`;
+      if (block.group) {
+        sourceId = nameToId(block.group);
+        sourceHandle = "handle-0";
+      }
+
       edges.push({
         id: edgeId,
         type: "customEdge",
-        source: block.id.toString(),
-        sourceHandle: `handle-${sourceHandleIdx.toString()}`,
+        source: sourceId,
+        sourceHandle: sourceHandle,
         target: targetId.toString(),
         data: {
           linkType: output.type,
@@ -187,7 +236,7 @@ export default function App() {
     <ReactFlowProvider>
       <div className="h-screen w-screen">
         <div className="h-[calc(4rem)] bg-blue-200 w-full flex items-center">
-          <span className="text-black text-2xl font-semibold mx-auto">
+          <span className="text-black text-2xl font-semibold mx-auto select-none">
             Multimedia Graph Visualization
           </span>
         </div>

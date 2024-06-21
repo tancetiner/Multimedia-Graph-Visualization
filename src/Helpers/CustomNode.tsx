@@ -18,6 +18,7 @@ export default function CustomNode(props: CustomNodeProps) {
     [BlockType.INPUT]: "bg-blue-400",
     [BlockType.OUTPUT]: "bg-green-400",
     [BlockType.FILTER]: "bg-red-400",
+    [BlockType.GROUP]: "bg-yellow-400",
   };
 
   const [handleCount, setHandleCount] = useState(props.data.handleCount);
@@ -31,9 +32,7 @@ export default function CustomNode(props: CustomNodeProps) {
     <>
       <Handle type="target" position={Position.Left} />
       <div
-        className={`py-4 px-2 rounded-lg ${
-          blockTypeToColor[props.data.blockType]
-        }`}
+        className={`p-2 rounded-lg ${blockTypeToColor[props.data.blockType]}`}
       >
         <label htmlFor="text">{props.data.label}</label>
       </div>
