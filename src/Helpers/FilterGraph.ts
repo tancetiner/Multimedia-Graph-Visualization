@@ -7,7 +7,7 @@ export interface Block {
 }
 
 export interface Output {
-  path: string[]; // Whole path of this link, including ids of blocks
+  targets: string[]; // Whole path of this link, including ids of blocks
   type: LinkType;
 }
 

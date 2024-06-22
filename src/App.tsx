@@ -86,33 +86,34 @@ const blocksToEdges = (blocks: Block[]): Edge[] => {
   blocks.forEach((block) => {
     let sourceHandleIdx = 0;
     block.outputs.forEach((output) => {
-      let targetId = output.path[output.path.length - 1];
-      const edgeId = `e-${nameToId(block.id)}-${nameToId(targetId)}`;
-      // get the block that has the targetId in their id field
-      const targetBlock = blocks.filter((b) => b.id === targetId)[0];
+      output.targets.forEach((target) => {
+        const edgeId = `e-${nameToId(block.id)}-${nameToId(target)}`;
+        // get the block that has the target in their id field
+        const targetBlock = blocks.filter((b) => b.id === target)[0];
 
-      // if the target block has a group field, set the targetId to the group id
-      if (targetBlock.group) {
-        targetId = nameToId(targetBlock.group);
-      }
+        // if the target block has a group field, set the targetId to the group id
+        if (targetBlock.group) {
+          target = nameToId(targetBlock.group);
+        }
 
-      // if the block has a group field, set the sourceId to the group id
-      let sourceId = block.id.toString();
-      let sourceHandle = `handle-${sourceHandleIdx.toString()}`;
-      if (block.group) {
-        sourceId = nameToId(block.group);
-        sourceHandle = "handle-0";
-      }
+        // if the block has a group field, set the sourceId to the group id
+        let sourceId = block.id.toString();
+        let sourceHandle = `handle-${sourceHandleIdx.toString()}`;
+        if (block.group) {
+          sourceId = nameToId(block.group);
+          sourceHandle = "handle-0";
+        }
 
-      edges.push({
-        id: edgeId,
-        type: "customEdge",
-        source: sourceId,
-        sourceHandle: sourceHandle,
-        target: targetId.toString(),
-        data: {
-          linkType: output.type,
-        },
+        edges.push({
+          id: edgeId,
+          type: "customEdge",
+          source: sourceId,
+          sourceHandle: sourceHandle,
+          target: target,
+          data: {
+            linkType: output.type,
+          },
+        });
       });
       sourceHandleIdx++;
     });
