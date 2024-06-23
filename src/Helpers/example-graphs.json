@@ -594,6 +594,263 @@
       }
     ]
   },
+
+  {
+    "title": "Dual Transcoding with Tiling",
+    "description": "Audio video transcoding in two qualities of a file",
+    "blocks": [
+      {
+        "id": "vidcap",
+        "name": "AV Capture",
+        "type": "input",
+        "outputs": [
+          { "targets": [ "audioencoder" ], "type": "audio"},
+          { "targets": [ "rescaler_r1", "rescaler_r2" ], "type": "video"}
+        ]
+      },
+      {
+        "id": "audioencoder",
+        "name": "Audio Encoder",
+        "type": "filter",
+        "outputs": [
+          { "targets": [ "dasher"], "type": "audio" }
+        ]
+      },
+      {
+        "id": "rescaler_r1",
+        "name": "Video Rescale 4K",
+        "type": "filter",
+        "outputs": [
+          { "targets": [ "videoencoder_r1"], "type": "video"}
+        ]
+      },
+      {
+        "id": "rescaler_r2",
+        "name": "Video Rescale HD",
+        "type": "filter",
+        "outputs": [
+          { "targets": [ "videoencoder_r2"], "type": "video"}
+        ]
+      },
+      {
+        "id": "videoencoder_r1",
+        "name": "Video Encoder 4K",
+        "type": "filter",
+        "outputs": [
+          { "targets": [ "rfnalu_r1" ], "type": "video" }
+        ]
+      },
+      {
+        "id": "videoencoder_r2",
+        "name": "Video Encoder HD",
+        "type": "filter",
+        "outputs": [
+          { "targets": [ "rfnalu_r2" ], "type": "video" }
+        ]
+      },
+      {
+        "id": "rfnalu_r1",
+        "name": "Video Reframer 4K",
+        "type": "filter",
+        "outputs": [
+          { "targets": [ "hevcsplit_r1" ], "type": "video" }
+        ]
+      },
+      {
+        "id": "rfnalu_r2",
+        "name": "Video Reframer HD",
+        "type": "filter",
+        "outputs": [
+          { "targets": [ "hevcsplit_r2" ], "type": "video" }
+        ]
+      },
+      {
+        "id": "hevcsplit_r1",
+        "name": "HEVC Spliter 4K",
+        "type": "filter",
+        "outputs": [
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" }
+        ]
+      },
+      {
+        "id": "hevcsplit_r2",
+        "name": "HEVC Spliter HD",
+        "type": "filter",
+        "outputs": [
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" },
+          { "targets": [ "dasher" ], "type": "video" }
+        ]
+      },
+      {
+        "id": "dasher",
+        "name": "Dasher",
+        "type": "filter",
+        "outputs": [
+          { "targets": [ "httpout"], "type": "file" },
+          { "targets": [ "audiomux"], "type": "audio" },
+
+          { "targets": [ "vidmux_r1_1"], "type": "video" },
+          { "targets": [ "vidmux_r1_2"], "type": "video" },
+          { "targets": [ "vidmux_r1_3"], "type": "video" },
+          { "targets": [ "vidmux_r1_4"], "type": "video" },
+          { "targets": [ "vidmux_r1_5"], "type": "video" },
+          { "targets": [ "vidmux_r1_6"], "type": "video" },
+          { "targets": [ "vidmux_r1_7"], "type": "video" },
+          { "targets": [ "vidmux_r1_8"], "type": "video" },
+          { "targets": [ "vidmux_r1_9"], "type": "video" },
+          { "targets": [ "vidmux_r1_10"], "type": "video" },
+          { "targets": [ "vidmux_r1_11"], "type": "video" },
+          { "targets": [ "vidmux_r1_12"], "type": "video" },
+          { "targets": [ "vidmux_r1_13"], "type": "video" },
+          { "targets": [ "vidmux_r1_14"], "type": "video" },
+          { "targets": [ "vidmux_r1_15"], "type": "video" },
+          { "targets": [ "vidmux_r1_16"], "type": "video" },
+
+          { "targets": [ "vidmux_r2_1"], "type": "video" },
+          { "targets": [ "vidmux_r2_2"], "type": "video" },
+          { "targets": [ "vidmux_r2_3"], "type": "video" },
+          { "targets": [ "vidmux_r2_4"], "type": "video" },
+          { "targets": [ "vidmux_r2_5"], "type": "video" },
+          { "targets": [ "vidmux_r2_6"], "type": "video" },
+          { "targets": [ "vidmux_r2_7"], "type": "video" },
+          { "targets": [ "vidmux_r2_8"], "type": "video" },
+          { "targets": [ "vidmux_r2_9"], "type": "video" },
+          { "targets": [ "vidmux_r2_10"], "type": "video" },
+          { "targets": [ "vidmux_r2_11"], "type": "video" },
+          { "targets": [ "vidmux_r2_12"], "type": "video" },
+          { "targets": [ "vidmux_r2_13"], "type": "video" },
+          { "targets": [ "vidmux_r2_14"], "type": "video" },
+          { "targets": [ "vidmux_r2_15"], "type": "video" },
+          { "targets": [ "vidmux_r2_16"], "type": "video" }
+        ]
+      },
+      { "id": "audiomux", "name": "Audio Mux", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+
+      { "id": "vidmux_r1_1", "name": "Video Mux 4K T1", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_2", "name": "Video Mux 4K T2", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_3", "name": "Video Mux 4K T3", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_4", "name": "Video Mux 4K T4", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_5", "name": "Video Mux 4K T5", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_6", "name": "Video Mux 4K T6", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_7", "name": "Video Mux 4K T7", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_8", "name": "Video Mux 4K T8", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_9", "name": "Video Mux 4K T9", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_10", "name": "Video Mux 4K T10", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_11", "name": "Video Mux 4K T11", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_12", "name": "Video Mux 4K T12", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_13", "name": "Video Mux 4K T13", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_14", "name": "Video Mux 4K T14", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_15", "name": "Video Mux 4K T15", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r1_16", "name": "Video Mux 4K T16", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+
+      { "id": "vidmux_r2_1", "name": "Video Mux HD T1", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_2", "name": "Video Mux HD T2", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_3", "name": "Video Mux HD T3", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_4", "name": "Video Mux HD T4", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_5", "name": "Video Mux HD T5", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_6", "name": "Video Mux HD T6", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_7", "name": "Video Mux HD T7", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_8", "name": "Video Mux HD T8", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_9", "name": "Video Mux HD T9", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_10", "name": "Video Mux HD T10", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_11", "name": "Video Mux HD T11", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_12", "name": "Video Mux HD T12", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_13", "name": "Video Mux HD T13", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_14", "name": "Video Mux HD T14", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_15", "name": "Video Mux HD T15", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+      { "id": "vidmux_r2_16", "name": "Video Mux HD T16", "type": "filter", "outputs": [ { "targets": [ "httpout"], "type": "file" } ] },
+
+      {
+        "id": "httpout",
+        "name": "HTTP Server",
+        "type": "output",
+        "outputs": []
+      }
+    ]
+  },
+
+  {
+    "title": "HTTP to M-ABR",
+    "description": "HTTP Streaming session to Multicast ABR and HTTP server",
+    "blocks": [
+      {
+        "id": "http_mpd",
+        "name": "Manifest Fetch",
+        "type": "input",
+        "outputs": [ { "targets": [ "dashin" ], "type": "file" } ]
+      },
+      {
+        "id": "http_vidq1",
+        "name": "Video Q1 Fetch",
+        "type": "input",
+        "outputs": [ { "targets": [ "dashin" ], "type": "file" } ]
+      },
+      {
+        "id": "http_vidq2",
+        "name": "Video Q2 Fetch",
+        "type": "input",
+        "outputs": [ { "targets": [ "dashin" ], "type": "file" } ]
+      },
+      {
+        "id": "http_vidq3",
+        "name": "Video Q3 Fetch",
+        "type": "input",
+        "outputs": [ { "targets": [ "dashin" ], "type": "file" } ]
+      },
+      {
+        "id": "http_aud",
+        "name": "Audio Fetch",
+        "type": "input",
+        "outputs": [ { "targets": [ "dashin" ], "type": "file" } ]
+      },
+
+      {
+        "id": "dashin",
+        "name": "DASH demuxer",
+        "type": "filter",
+        "outputs": [
+          { "targets": [ "routeout", "httpout" ], "type": "file" },
+          { "targets": [ "routeout", "httpout" ], "type": "file" },
+          { "targets": [ "routeout", "httpout" ], "type": "file" },
+          { "targets": [ "routeout", "httpout" ], "type": "file" },
+          { "targets": [ "routeout", "httpout" ], "type": "file" }
+        ]
+      },
+      { "id": "routeout", "name": "MABR Sender", "type": "output", "outputs": [] },
+      { "id": "httpout", "name": "HTTP Mirror", "type": "output", "outputs": [] }
+    ]
+  },
+
+
   {
     "title": "Simple Graph with Grouping",
     "description": "Really simple graph with one input, four filters and one output. 3 filters are grouped together.",
