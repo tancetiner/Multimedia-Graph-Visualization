@@ -87,7 +87,6 @@ const blocksToEdges = (blocks: Block[]): Edge[] => {
     let sourceHandleIdx = 0;
     block.outputs.forEach((output) => {
       output.targets.forEach((target) => {
-        const edgeId = `e-${nameToId(block.id)}-${nameToId(target)}`;
         // get the block that has the target in their id field
         const targetBlock = blocks.filter((b) => b.id === target)[0];
 
@@ -103,6 +102,10 @@ const blocksToEdges = (blocks: Block[]): Edge[] => {
           sourceId = nameToId(block.group);
           sourceHandle = "handle-0";
         }
+
+        const edgeId = `e-${sourceHandleIdx}-${nameToId(block.id)}-${nameToId(
+          target
+        )}`;
 
         edges.push({
           id: edgeId,
