@@ -61,6 +61,7 @@ interface ElkLayoutProps {
   onEdgesChange: (changes: EdgeChange[]) => void;
   nodeTypes: NodeTypes;
   edgeTypes: any;
+  changeLayoutDirection: (direction: string) => void;
 }
 
 const DagreLayout: React.FC<ElkLayoutProps> = ({
@@ -70,6 +71,7 @@ const DagreLayout: React.FC<ElkLayoutProps> = ({
   onEdgesChange,
   nodeTypes,
   edgeTypes,
+  changeLayoutDirection,
 }) => {
   const { getLayoutedElements } = useLayoutedElements();
 
@@ -85,22 +87,24 @@ const DagreLayout: React.FC<ElkLayoutProps> = ({
     >
       <Panel position="top-right" className="space-x-4">
         <button
-          onClick={() =>
+          onClick={() => {
             getLayoutedElements({
               "elk.algorithm": "layered",
               "elk.direction": "DOWN",
-            })
-          }
+            });
+            changeLayoutDirection("vertical");
+          }}
         >
           Vertical Layout
         </button>
         <button
-          onClick={() =>
+          onClick={() => {
             getLayoutedElements({
               "elk.algorithm": "layered",
               "elk.direction": "RIGHT",
-            })
-          }
+            });
+            changeLayoutDirection("horizontal");
+          }}
         >
           Horizontal Layout
         </button>

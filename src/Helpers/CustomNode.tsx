@@ -8,6 +8,7 @@ interface CustomNodeProps {
     blockType: BlockType;
     handleCount: number;
     nodeId: string;
+    layoutDirection: string;
   };
 }
 
@@ -22,15 +23,28 @@ export default function CustomNode(props: CustomNodeProps) {
   };
 
   const [handleCount, setHandleCount] = useState(props.data.handleCount);
+  const [layoutDirection, setLayoutDirection] = useState(
+    props.data.layoutDirection
+  );
 
   useEffect(() => {
     setHandleCount(props.data.handleCount);
     updateNodeInternals(props.data.nodeId);
   }, [props.data.handleCount, updateNodeInternals]);
 
+  useEffect(() => {
+    setLayoutDirection(props.data.layoutDirection);
+    console.log("layoutDirection: ", props.data.layoutDirection);
+  }, [props.data.layoutDirection]);
+
   return (
     <>
-      <Handle type="target" position={Position.Left} />
+      <Handle
+        type="target"
+        position={
+          layoutDirection === "horizontal" ? Position.Left : Position.Top
+        }
+      />
       <div
         className={`p-2 rounded-lg ${blockTypeToColor[props.data.blockType]}`}
       >
@@ -40,9 +54,15 @@ export default function CustomNode(props: CustomNodeProps) {
         <Handle
           key={index}
           type="source"
-          position={Position.Right}
+          position={
+            layoutDirection === "horizontal" ? Position.Right : Position.Bottom
+          }
           id={`handle-${index}`}
-          style={{ top: `${(index + 1) * (100 / (handleCount + 1))}%` }}
+          style={
+            layoutDirection === "horizontal"
+              ? { top: `${(index + 1) * (100 / (handleCount + 1))}%` }
+              : { left: `${(index + 1) * (100 / (handleCount + 1))}%` }
+          }
         />
       ))}
     </>

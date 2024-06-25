@@ -27,59 +27,6 @@ const nameToId = (name: string): string => {
   return name.replace(/\s+/g, "_").toLowerCase();
 };
 
-const blocksToNodes = (blocks: Block[]): Node[] => {
-  const nodes: Node[] = [];
-  const groups: Set<string> = new Set();
-
-  blocks.forEach((block, i) => {
-    // if block has a group, create a new group node
-    if (block.group) {
-      if (!groups.has(block.group)) {
-        groups.add(block.group); // if group doesn't exist in the set, add it
-        nodes.push({
-          id: nameToId(block.group),
-          position: returnPositions(i),
-          type: "customNode",
-          data: {
-            label: block.group,
-            blockType: block.type,
-          },
-        });
-      }
-
-      nodes.push({
-        id: block.id.toString(),
-        position: returnPositions(i),
-        type: "customNode",
-        parentId: nameToId(block.group),
-        extent: "parent",
-        data: {
-          label: block.name,
-          blockType: block.type,
-          handleCount: block.outputs.length,
-          nodeId: block.id,
-        },
-      });
-    } else {
-      nodes.push({
-        id: block.id.toString(),
-        position: returnPositions(i),
-        type: "customNode",
-        data: {
-          label: block.name,
-          blockType: block.type,
-          handleCount: block.outputs.length,
-          nodeId: block.id,
-        },
-      });
-    }
-  });
-
-  console.info(nodes);
-
-  return nodes;
-};
-
 const blocksToEdges = (blocks: Block[]): Edge[] => {
   const edges: Edge[] = [];
 
@@ -137,9 +84,75 @@ export default function App() {
   const [blockCount, setBlockCount] = useState<number>(1);
   const [layoutType, setLayoutType] = useState<string>("No Layout");
   const [exampleGraphIdx, setExampleGraphIdx] = useState<number>(0);
+  const [layoutDirection, setLayoutDirection] = useState<string>("horizontal");
 
   const nodeTypes: NodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
   const edgeTypes: any = useMemo(() => ({ customEdge: CustomEdge }), []);
+
+  const changeLayoutDirection = useCallback(
+    (direction: string) => {
+      setLayoutDirection(direction);
+    },
+    [setLayoutDirection]
+  );
+
+  const blocksToNodes = (blocks: Block[]): Node[] => {
+    const nodes: Node[] = [];
+    const groups: Set<string> = new Set();
+
+    blocks.forEach((block, i) => {
+      // if block has a group, create a new group node
+      if (block.group) {
+        if (!groups.has(block.group)) {
+          groups.add(block.group); // if group doesn't exist in the set, add it
+
+          // create a new group node
+          nodes.push({
+            id: nameToId(block.group),
+            position: returnPositions(i),
+            type: "customNode",
+            data: {
+              label: block.group,
+              blockType: block.type,
+              layoutDirection: layoutDirection,
+            },
+          });
+        }
+
+        nodes.push({
+          id: block.id.toString(),
+          position: returnPositions(i),
+          type: "customNode",
+          parentId: nameToId(block.group),
+          extent: "parent",
+          data: {
+            label: block.name,
+            blockType: block.type,
+            handleCount: block.outputs.length,
+            nodeId: block.id,
+            layoutDirection: layoutDirection,
+          },
+        });
+      } else {
+        nodes.push({
+          id: block.id.toString(),
+          position: returnPositions(i),
+          type: "customNode",
+          data: {
+            label: block.name,
+            blockType: block.type,
+            handleCount: block.outputs.length,
+            nodeId: block.id,
+            layoutDirection: layoutDirection,
+          },
+        });
+      }
+    });
+
+    console.info(nodes);
+
+    return nodes;
+  };
 
   const returnLayoutView = useCallback(
     (layout: string) => {
@@ -166,6 +179,7 @@ export default function App() {
               onEdgesChange={onEdgesChange}
               nodeTypes={nodeTypes}
               edgeTypes={edgeTypes}
+              changeLayoutDirection={changeLayoutDirection}
             />
           );
         default:
@@ -201,6 +215,11 @@ export default function App() {
   useEffect(() => {
     setExampleGraph();
   }, [exampleGraphIdx, setExampleGraph]);
+
+  useEffect(() => {
+    setNodes(blocksToNodes(blocks));
+    setEdges(blocksToEdges(blocks));
+  }, [layoutDirection]);
 
   const resetGraph = useCallback(() => {
     setNodes([]);
