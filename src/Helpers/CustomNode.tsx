@@ -1,5 +1,5 @@
 import { Handle, Position, useUpdateNodeInternals } from "reactflow";
-import { BlockType } from "./FilterGraph";
+import { BlockType } from "./Block";
 import { useEffect, useState } from "react";
 
 interface CustomNodeProps {

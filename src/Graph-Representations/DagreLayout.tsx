@@ -13,7 +13,7 @@ import ReactFlow, {
   NodeTypes,
 } from "reactflow";
 
-import { BlockType } from "../Helpers/FilterGraph";
+import { BlockType } from "../Helpers/Block";
 
 import "reactflow/dist/style.css";
 

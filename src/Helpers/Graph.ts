@@ -1,45 +1,16 @@
-export interface Block {
-  id: string;
-  name: string;
-  outputs: Output[];
-  type: BlockType;
-  group?: string;
-}
-
-export interface Output {
-  targets: string[]; // Whole path of this link, including ids of blocks
-  type: LinkType;
-}
-
-export enum LinkType {
-  audio = "audio",
-  video = "video",
-  text = "text",
-  file = "file",
-}
-
-export enum BlockType {
-  FILTER = "filter",
-  INPUT = "input",
-  OUTPUT = "output",
-  GROUP = "group",
-}
+import { Block, BlockType } from "./Block";
 
 class Graph {
   private blocks: Block[] = [];
 
-  constructor(
-    private numInputs: number,
-    private numOutputs: number,
-    private numFilters: number,
-  ) {
+  constructor(numInputs: number, numOutputs: number, numFilters: number) {
     this.initializeGraph(numInputs, numOutputs, numFilters);
   }
 
   private initializeGraph(
     numInputs: number,
     numOutputs: number,
-    numFilters: number,
+    numFilters: number
   ) {
     let idCounter = 0;
 
@@ -63,7 +34,6 @@ class Graph {
         outputs: [],
       });
       idCounter++;
-
     }
 
     // Create output blocks
@@ -75,17 +45,16 @@ class Graph {
         outputs: [],
       });
       idCounter++;
-
     }
 
     this.connectBlocks();
 
     // Ensure paths from inputs to outputs
     for (const input of this.blocks.filter(
-      (block) => block.type === BlockType.INPUT,
+      (block) => block.type === BlockType.INPUT
     )) {
       for (const output of this.blocks.filter(
-        (block) => block.type === BlockType.OUTPUT,
+        (block) => block.type === BlockType.OUTPUT
       )) {
         if (!this.ensurePath(input.id, output.id)) {
           // If a path does not exist, create one
@@ -97,13 +66,13 @@ class Graph {
 
   private connectBlocks() {
     const inputs = this.blocks.filter(
-      (block) => block.type === BlockType.INPUT,
+      (block) => block.type === BlockType.INPUT
     );
     const outputs = this.blocks.filter(
-      (block) => block.type === BlockType.OUTPUT,
+      (block) => block.type === BlockType.OUTPUT
     );
     const filters = this.blocks.filter(
-      (block) => block.type === BlockType.FILTER,
+      (block) => block.type === BlockType.FILTER
     );
 
     const allBlocks = [...inputs, ...filters];
@@ -115,12 +84,8 @@ class Graph {
         const inputBlock =
           previousBlocks[Math.floor(Math.random() * previousBlocks.length)];
         if (!this.wouldCreateCycle(inputBlock.id, filter.id)) {
-          const newPath = [
-            ...(this.getExistingPath(inputBlock.id) || []),
-            filter.id,
-          ];
           inputBlock.outputs.push({
-            path: newPath,
+            targets: [filter.id],
             type: this.getRandomLinkType(),
           });
         }
@@ -135,12 +100,9 @@ class Graph {
           const outputBlock =
             nextBlocks[Math.floor(Math.random() * nextBlocks.length)];
           if (!this.wouldCreateCycle(filter.id, outputBlock.id)) {
-            const newPath = [
-              ...(this.getExistingPath(filter.id) || []),
-              outputBlock.id,
-            ];
+            const newPath = [outputBlock.id];
             filter.outputs.push({
-              path: newPath,
+              targets: newPath,
               type: this.getRandomLinkType(),
             });
           }
@@ -149,33 +111,10 @@ class Graph {
     }
   }
 
-  private getExistingPath(blockId: string): string[] | null {
-    for (const block of this.blocks) {
-      for (const output of block.outputs) {
-        if (output.path[output.path.length - 1] === blockId) {
-          return output.path;
-        }
-      }
-    }
-    return null;
-  }
-  private ensurePathsToOutputs() {
-    const outputIds = this.blocks
-      .filter((block) => block.type === BlockType.OUTPUT)
-      .map((block) => block.id);
-    for (const block of this.blocks) {
-      if (block.type === BlockType.INPUT) {
-        for (const outputId of outputIds) {
-          this.ensurePath(block.id, outputId);
-        }
-      }
-    }
-  }
-
   private ensurePath(
     startId: string,
     endId: string,
-    visited: Set<string> = new Set(),
+    visited: Set<string> = new Set()
   ): boolean {
     if (startId === endId) return true;
     if (visited.has(startId)) return false;
@@ -185,9 +124,7 @@ class Graph {
     if (!block) return false;
 
     for (const output of block.outputs) {
-      if (
-        this.ensurePath(output.path[output.path.length - 1], endId, visited)
-      ) {
+      if (this.ensurePath(output.targets[0], endId, visited)) {
         return true;
       }
     }
@@ -196,18 +133,17 @@ class Graph {
       const possibleOutputs = this.blocks.filter(
         (b) =>
           b.type === BlockType.FILTER ||
-          (b.type === BlockType.OUTPUT && b.id === endId),
+          (b.type === BlockType.OUTPUT && b.id === endId)
       );
       for (const nextBlock of possibleOutputs) {
         if (
           !visited.has(nextBlock.id) &&
           !this.wouldCreateCycle(block.id, nextBlock.id)
         ) {
-          const newPath = [
-            ...(this.getExistingPath(block.id) || []),
-            nextBlock.id,
-          ];
-          block.outputs.push({ path: newPath, type: this.getRandomLinkType() });
+          block.outputs.push({
+            targets: [nextBlock.id],
+            type: this.getRandomLinkType(),
+          });
           if (this.ensurePath(nextBlock.id, endId, visited)) {
             return true;
           }
@@ -221,7 +157,7 @@ class Graph {
   private wouldCreateCycle(
     startId: string,
     endId: string,
-    visited: Set<string> = new Set(),
+    visited: Set<string> = new Set()
   ): boolean {
     if (startId === endId) return true;
     if (visited.has(startId)) return false;
@@ -231,13 +167,7 @@ class Graph {
     if (!block) return false;
 
     for (const output of block.outputs) {
-      if (
-        this.wouldCreateCycle(
-          output.path[output.path.length - 1],
-          endId,
-          visited,
-        )
-      ) {
+      if (this.wouldCreateCycle(output.targets[0], endId, visited)) {
         return true;
       }
     }
@@ -250,18 +180,6 @@ class Graph {
     return types[Math.floor(Math.random() * types.length)];
   }
 
-  public printGraph() {
-    for (const block of this.blocks) {
-      console.log(`Block ${block.name} (ID: ${block.id}, Type: ${block.type})`);
-      console.log(`  Outputs:`);
-      for (const output of block.outputs) {
-        console.log(
-          `    Path: ${output.path.join(" -> ")}, Type: ${output.type}`,
-        );
-      }
-    }
-  }
-
   public getBlocks() {
     return this.blocks;
   }
@@ -270,7 +188,7 @@ class Graph {
 export const initializeGraph = (
   inputBlocks: number,
   outputBlocks: number,
-  filterBlocks: number,
+  filterBlocks: number
 ) => {
   const graph = new Graph(inputBlocks, outputBlocks, filterBlocks);
   return graph.getBlocks();

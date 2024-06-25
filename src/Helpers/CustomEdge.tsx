@@ -1,6 +1,6 @@
 import React from "react";
 import { BaseEdge, EdgeLabelRenderer, getSimpleBezierPath } from "reactflow";
-import { LinkType } from "./FilterGraph";
+import { LinkType } from "./Block";
 
 const linkTypeToColor: { [key in LinkType]: string } = {
   [LinkType.audio]: "#ff0000",

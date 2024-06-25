@@ -89,7 +89,6 @@ const DagreLayout: React.FC<ElkLayoutProps> = ({
         <button
           onClick={() => {
             getLayoutedElements({
-              "elk.algorithm": "layered",
               "elk.direction": "DOWN",
             });
             changeLayoutDirection("vertical");
@@ -100,7 +99,6 @@ const DagreLayout: React.FC<ElkLayoutProps> = ({
         <button
           onClick={() => {
             getLayoutedElements({
-              "elk.algorithm": "layered",
               "elk.direction": "RIGHT",
             });
             changeLayoutDirection("horizontal");
