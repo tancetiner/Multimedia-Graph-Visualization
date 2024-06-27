@@ -28,6 +28,7 @@ import ExampleGraphs from "./Components/ExampleGraphs";
 import UploadGraph from "./Components/UploadGraph";
 import LayoutOptions from "./Components/LayoutOptions";
 import GraphGeneration from "./Components/GraphGeneration";
+import GroupNode from "./Helpers/GroupNode";
 
 // App Component
 export default function App() {
@@ -43,7 +44,10 @@ export default function App() {
   const [exampleGraphIdx, setExampleGraphIdx] = useState<number>(0);
   const [layoutDirection, setLayoutDirection] = useState<string>("horizontal");
 
-  const nodeTypes: NodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
+  const nodeTypes: NodeTypes = useMemo(
+    () => ({ customNode: CustomNode, groupNode: GroupNode }),
+    []
+  );
   const edgeTypes: any = useMemo(() => ({ customEdge: CustomEdge }), []);
 
   // Callbacks
@@ -165,7 +169,7 @@ export default function App() {
     <ReactFlowProvider>
       <div className="h-screen w-screen">
         <Header title="Multimedia Graph Visualization" />
-        <div className="h-[calc(100vh-12rem)] w-full">
+        <div className="h-[calc(100vh-10rem)] w-full">
           {nodes.length ? returnLayoutView(layoutType) : <EmptyGraphMessage />}
         </div>
         <div className="flex justify-evenly items-center px-10 w-full h-[calc(6rem)] bg-blue-200 space-x-8">

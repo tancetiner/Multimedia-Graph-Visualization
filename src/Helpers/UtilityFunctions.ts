@@ -26,11 +26,13 @@ export const blocksToNodes = (
         nodes.push({
           id: nameToId(block.group),
           position: returnPositions(i),
-          type: "customNode",
+          type: "groupNode",
           data: {
             label: block.group,
-            blockType: block.type,
             layoutDirection: layoutDirection,
+            nodeId: nameToId(block.group),
+            handleCount: 3, // default handle count for group nodes for now
+            numberOfFilters: 0, // TODO: implement filter functionality
           },
         });
       }
