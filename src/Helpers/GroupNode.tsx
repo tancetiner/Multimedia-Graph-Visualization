@@ -37,8 +37,13 @@ export default function GroupNode(props: GroupNodeProps) {
           layoutDirection === "horizontal" ? Position.Left : Position.Top
         }
       />
-      <div className="p-2 h-48 w-48 rounded-lg bg-yellow-400">
-        <label htmlFor="text">{props.data.label}</label>
+      <div className="p-2 h-48 w-48 rounded-lg bg-yellow-400 flex flex-col justify-center">
+        <label htmlFor="text" className="mx-auto">
+          {props.data.label}
+        </label>
+        <label htmlFor="text" className="mx-auto">
+          {props.data.numberOfFilters} Filters
+        </label>
       </div>
       {Array.from({ length: handleCount }).map((_, index) => (
         <Handle

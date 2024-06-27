@@ -21,7 +21,7 @@ import { initializeGraph } from "./Helpers/Graph";
 import exampleGraphs from "./Helpers/example-graphs.json";
 import CustomNode from "./Helpers/CustomNode";
 import CustomEdge from "./Helpers/CustomEdge";
-import { blocksToEdges, blocksToNodes } from "./Helpers/UtilityFunctions";
+import { blocksToNodesAndEdges } from "./Helpers/UtilityFunctions";
 import Header from "./Components/Header";
 import EmptyGraphMessage from "./Components/EmptyGraphMessage";
 import ExampleGraphs from "./Components/ExampleGraphs";
@@ -161,8 +161,13 @@ export default function App() {
 
   useEffect(() => {
     resetGraph();
-    setNodes(blocksToNodes(blocks, layoutDirection));
-    setEdges(blocksToEdges(blocks));
+    const { nodes, edges } = blocksToNodesAndEdges(
+      blocks,
+      layoutDirection,
+      grouping
+    );
+    setNodes(nodes);
+    setEdges(edges);
   }, [blocks, resetGraph, grouping, layoutDirection]);
 
   // Render

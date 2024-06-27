@@ -41,11 +41,11 @@ const LayoutOptions: React.FC<LayoutOptionsProps> = ({
         />
         <label
           htmlFor="react-toggle"
-          className="cursor-pointer w-14 h-8 flex items-center bg-gray-300 rounded-full p-1 duration-300 ease-in-out"
+          className="cursor-pointer w-14 h-8 flex items-center bg-slate-200 rounded-full p-1 duration-300 ease-in-out"
         >
           <div
             className={`bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out ${
-              grouping ? "translate-x-6 bg-blue-500 peer-focus:bg-black" : ""
+              grouping ? "translate-x-6 bg-purple-500 peer-focus:bg-black" : ""
             }`}
           />
         </label>
