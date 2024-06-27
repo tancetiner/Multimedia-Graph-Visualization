@@ -149,7 +149,7 @@ const DagreLayout: React.FC<DagreLayoutProps> = ({
         edgeTypes={edgeTypes}
         fitView
       >
-        <Panel position="top-right" className="space-x-4">
+        <Panel position="top-left" className="space-x-4">
           <button onClick={() => onLayout("LR")}>Horizontal Layout</button>
         </Panel>
         <Controls />

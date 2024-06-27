@@ -85,7 +85,7 @@ const DagreLayout: React.FC<ElkLayoutProps> = ({
       edgeTypes={edgeTypes}
       fitView
     >
-      <Panel position="top-right" className="space-x-4">
+      <Panel position="top-left" className="space-x-4">
         <button
           onClick={() => {
             getLayoutedElements({

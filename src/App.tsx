@@ -43,6 +43,7 @@ export default function App() {
   const [layoutType, setLayoutType] = useState<string>("No Layout");
   const [exampleGraphIdx, setExampleGraphIdx] = useState<number>(0);
   const [layoutDirection, setLayoutDirection] = useState<string>("horizontal");
+  const [grouping, setGrouping] = useState<boolean>(false);
 
   const nodeTypes: NodeTypes = useMemo(
     () => ({ customNode: CustomNode, groupNode: GroupNode }),
@@ -149,20 +150,20 @@ export default function App() {
     []
   );
 
+  const toggleGrouping = useCallback(() => {
+    setGrouping((prevGrouping) => !prevGrouping);
+  }, [setGrouping]);
+
   // Use Effects
   useEffect(() => {
     setExampleGraph();
   }, [exampleGraphIdx, setExampleGraph]);
 
   useEffect(() => {
-    setNodes(blocksToNodes(blocks, layoutDirection));
-    setEdges(blocksToEdges(blocks));
-  }, [layoutDirection]);
-  useEffect(() => {
     resetGraph();
     setNodes(blocksToNodes(blocks, layoutDirection));
     setEdges(blocksToEdges(blocks));
-  }, [blocks, resetGraph]);
+  }, [blocks, resetGraph, grouping, layoutDirection]);
 
   // Render
   return (
@@ -172,26 +173,33 @@ export default function App() {
         <div className="h-[calc(100vh-10rem)] w-full">
           {nodes.length ? returnLayoutView(layoutType) : <EmptyGraphMessage />}
         </div>
-        <div className="flex justify-evenly items-center px-10 w-full h-[calc(6rem)] bg-blue-200 space-x-8">
-          <ExampleGraphs
-            exampleGraphIdx={exampleGraphIdx}
-            setExampleGraphIdx={setExampleGraphIdx}
-            exampleGraphs={exampleGraphs}
-          />
-          <UploadGraph handleFileUpload={handleFileUpload} />
-          <LayoutOptions
-            layoutType={layoutType}
-            setLayoutType={setLayoutType}
-          />
-          <GraphGeneration
-            inputCount={inputCount}
-            setInputCount={setInputCount}
-            outputCount={outputCount}
-            setOutputCount={setOutputCount}
-            blockCount={blockCount}
-            setBlockCount={setBlockCount}
-            setRandomGraph={setRandomGraph}
-          />
+        <div className="flex justify-between items-center px-[calc(4rem)] w-full h-[calc(6rem)] bg-blue-200">
+          <div className="">
+            <LayoutOptions
+              layoutType={layoutType}
+              setLayoutType={setLayoutType}
+              grouping={grouping}
+              toggleGrouping={toggleGrouping}
+            />
+          </div>
+
+          <div className="flex justify-evenly space-x-[calc(4rem)]">
+            <ExampleGraphs
+              exampleGraphIdx={exampleGraphIdx}
+              setExampleGraphIdx={setExampleGraphIdx}
+              exampleGraphs={exampleGraphs}
+            />
+            <UploadGraph handleFileUpload={handleFileUpload} />
+            <GraphGeneration
+              inputCount={inputCount}
+              setInputCount={setInputCount}
+              outputCount={outputCount}
+              setOutputCount={setOutputCount}
+              blockCount={blockCount}
+              setBlockCount={setBlockCount}
+              setRandomGraph={setRandomGraph}
+            />
+          </div>
         </div>
       </div>
     </ReactFlowProvider>
