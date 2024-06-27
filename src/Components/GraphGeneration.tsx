@@ -20,7 +20,7 @@ const GraphGeneration: React.FC<GraphGenerationProps> = ({
   setRandomGraph,
 }) => {
   return (
-    <div className="flex flex-row justify-start items-center space-y-2">
+    <div className="flex flex-row justify-start items-center space-x-4">
       <div className="flex flex-col justify-start items-center space-y-2">
         <span className="select-none">Input Count</span>
         <select

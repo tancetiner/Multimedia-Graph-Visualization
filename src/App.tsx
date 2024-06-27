@@ -134,6 +134,7 @@ export default function App() {
         const target = e.target as FileReader;
         try {
           const json = JSON.parse(target.result as string);
+          resetGraph();
           setBlocks(json.blocks);
         } catch (err) {
           alert("Failed to parse JSON file.");
