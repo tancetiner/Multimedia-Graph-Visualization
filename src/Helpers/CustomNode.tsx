@@ -34,7 +34,6 @@ export default function CustomNode(props: CustomNodeProps) {
 
   useEffect(() => {
     setLayoutDirection(props.data.layoutDirection);
-    console.log("layoutDirection: ", props.data.layoutDirection);
   }, [props.data.layoutDirection]);
 
   return (

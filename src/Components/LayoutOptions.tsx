@@ -45,7 +45,7 @@ const LayoutOptions: React.FC<LayoutOptionsProps> = ({
         >
           <div
             className={`bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out ${
-              grouping ? "translate-x-6 bg-purple-500 peer-focus:bg-black" : ""
+              grouping ? "translate-x-6 bg-purple-500" : ""
             }`}
           />
         </label>

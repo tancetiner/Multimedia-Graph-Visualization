@@ -26,7 +26,6 @@ export default function GroupNode(props: GroupNodeProps) {
 
   useEffect(() => {
     setLayoutDirection(props.data.layoutDirection);
-    console.log("layoutDirection: ", props.data.layoutDirection);
   }, [props.data.layoutDirection]);
 
   return (

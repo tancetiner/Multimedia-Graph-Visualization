@@ -27,7 +27,7 @@ export const blocksToNodesAndEdges = (
   blocks: Block[],
   layoutDirection: string,
   grouping: boolean
-) => {
+): { nodes: Node[]; edges: Edge[] } => {
   // NODES
   const nodes: Node[] = [];
   const groups: { [key: string]: GroupInfo } = {};
@@ -102,7 +102,7 @@ export const blocksToNodesAndEdges = (
 
   blocks.forEach((block) => {
     let sourceHandleIdx = 0;
-    if (!grouping || !block.group) {
+    if (!(grouping && block.group)) {
       block.outputs.forEach((output) => {
         output.targets.forEach((target) => {
           // get the block that has the target in their id field
@@ -142,39 +142,41 @@ export const blocksToNodesAndEdges = (
   });
 
   // iterate over the nodes and add the edges of the group nodes
-  nodes.forEach((node) => {
-    if (node.type === "groupNode") {
-      const group = groups[node.id];
-      let sourceHandleIdx = 0;
-      group.handles.forEach((handle) => {
-        handle.outputs.forEach((output) => {
-          let target = output;
-          const targetBlock = blocks.filter((b) => b.id === target)[0];
+  if (grouping) {
+    nodes.forEach((node) => {
+      if (node.type === "groupNode") {
+        const group = groups[node.id];
+        let sourceHandleIdx = 0;
+        group.handles.forEach((handle) => {
+          handle.outputs.forEach((output) => {
+            let target = output;
+            const targetBlock = blocks.filter((b) => b.id === target)[0];
 
-          if (targetBlock.group) {
-            target = nameToId(targetBlock.group);
-          }
+            if (targetBlock.group) {
+              target = nameToId(targetBlock.group);
+            }
 
-          const sourceId = node.id;
-          const sourceHandle = `handle-${sourceHandleIdx.toString()}`;
+            const sourceId = node.id;
+            const sourceHandle = `handle-${sourceHandleIdx.toString()}`;
 
-          const edgeId = `e-${sourceHandleIdx}-${node.id}-${target}`;
+            const edgeId = `e-${sourceHandleIdx}-${node.id}-${target}`;
 
-          edges.push({
-            id: edgeId,
-            type: "customEdge",
-            source: sourceId,
-            sourceHandle: sourceHandle,
-            target: target,
-            data: {
-              linkType: handle.type,
-            },
+            edges.push({
+              id: edgeId,
+              type: "customEdge",
+              source: sourceId,
+              sourceHandle: sourceHandle,
+              target: target,
+              data: {
+                linkType: handle.type,
+              },
+            });
           });
+          sourceHandleIdx++;
         });
-        sourceHandleIdx++;
-      });
-    }
-  });
+      }
+    });
+  }
 
   console.log(edges);
 
