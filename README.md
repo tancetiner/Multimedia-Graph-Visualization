@@ -1,35 +1,12 @@
 # Multimedia-Graph-Visualization
+The **Multimedia Graph Visualization** project is designed to simplify the complexities of filter graphs by enabling visualization of data flow within a web application. This project is part of the [GPAC project](https://gpac.io/), focusing on creating an intuitive and interactive interface that allows users to understand and manipulate multimedia graphs effectively.
 
-The **Multimedia-Graph-Visualization** project aims to simplify the complexities of filter graphs within GPAC by enabling real-time visualization of data flow within a web browser. This project focuses on creating an intuitive and interactive interface using responsive design principles, making it easier for users to understand and manipulate multimedia graphs effectively.
+This is the research project I conducted for my M1 degree in [IP Paris](https://www.ip-paris.fr/en).
 
-This project is part of the [GPAC framework](https://gpac.io/).
+The project was supervised by Professor Jean Le Feuvre, and it is now completed.
 
-This is the research project I conducted for my M1 degree in [Telecom Paris](https://www.telecom-paris.fr/en/home).
+## Project Documentation and Log
 
-The project is supervised by Professor [Jean Le Feuvre](https://lefeuvre.wp.imt.fr/).
+For comprehensive technical details, such as formats, libraries, and implementation specifics, refer to our [Wiki](https://github.com/tancetiner/Multimedia-Graph-Visualization/wiki). This section includes documentation on integrating multimedia graph visualization within the context of the GPAC project, along with guidelines for contributors.
 
-## Project Log
-
-Follow the development progress of this project through our [project log](https://hackmd.io/@Cs7I3U-1QkmBjlGWMGXvwg/gpac-log), where we document milestones, challenges, and technical decisions.
-
-## Setup
-
-To run the web application locally, follow these steps:
-
-```bash
-# Clone the repository
-git clone https://github.com/tancetiner/Multimedia-Graph-Visualization.git
-
-# Enter the directory
-cd Multimedia-Graph-Visualization
-
-# Install dependencies
-npm install
-
-# Run on local port
-npm run dev
-```
-
-## Usage
-
-Once the application is running, open your web browser and navigate to the local server address (e.g., http://localhost:3000 or any other port displayed in the console) to start using the multimedia graph visualization tool.
+Follow the development progress of this project through our [project log](https://hackmd.io/@Cs7I3U-1QkmBjlGWMGXvwg/gpac-log), where milestones, challenges, and technical decisions are documented.
