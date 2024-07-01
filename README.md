@@ -9,4 +9,4 @@ The project was supervised by Professor Jean Le Feuvre, and it is now completed.
 
 For comprehensive technical details, such as formats, libraries, and implementation specifics, refer to our [Wiki](https://github.com/tancetiner/Multimedia-Graph-Visualization/wiki). This section includes documentation on integrating multimedia graph visualization within the context of the GPAC project, along with guidelines for contributors.
 
-Follow the development progress of this project through our [project log](https://hackmd.io/@Cs7I3U-1QkmBjlGWMGXvwg/gpac-log), where milestones, challenges, and technical decisions are documented.
+Follow the development progress of this project through our [project log](https://hackmd.io/@Cs7I3U-1QkmBjlGWMGXvwg/SkevAXJpT), where milestones, challenges, and technical decisions are documented.
